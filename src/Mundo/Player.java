@@ -2,7 +2,7 @@ package Mundo;
 
 public class Player extends Ball implements Moves{
 	
-	public final static int DEFAULT_MASS=10;
+	public final static int DEFAULT_MASS=200;
 	
 	public final static int POSITION_DELTA_MAGNITUDE=2;
 	
@@ -19,7 +19,8 @@ public class Player extends Ball implements Moves{
 		this.name = name;
 		alive=true;
 		this.angularDireccion=0;
-		
+		this.setPosX(50);
+		this.setPosY(50);
 	}
 	
 	/**
@@ -94,6 +95,8 @@ public class Player extends Ball implements Moves{
 	@Override
 	public void changeDirection(int x, int y) {
 		
+		if( x!=0&& y!=0) {
+			
 		double alpha=Math.toDegrees(Math.atan(y/x));
 		
 		if(x>0&&y>0) {
@@ -113,7 +116,10 @@ public class Player extends Ball implements Moves{
 		}else if(x==0&&y==0) {
 			this.setAngularDireccion(this.getAngularDireccion());
 		}
-			
+		}
+		else {
+			this.setAngularDireccion(0);
+		}
 	}
 
 	

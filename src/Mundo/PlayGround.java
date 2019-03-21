@@ -15,7 +15,7 @@ public class PlayGround {
 		balls = new ArrayList<Ball>();
 		
 		for (int i = 0; i < 600; i++) {
-			Food a=new Food();
+			Food a=new Food(5);
 			balls.add(a);
 		}
 	}
@@ -50,11 +50,11 @@ public class PlayGround {
 						 
 						 if(distance(balls.get(i).getPosX(),balls.get(i).getPosY(), balls.get(j).getPosX(),balls.get(j).getPosY())<balls.get(i).getRadious()+balls.get(j).getRadious()) {
 							 
-							 if() {
+							// if() {
 								 
-							 }else if() {
+							 //}else if() {
 								 
-							 }
+							 //}
 							 
 						 }
 						 
