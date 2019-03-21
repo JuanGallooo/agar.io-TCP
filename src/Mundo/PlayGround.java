@@ -12,6 +12,7 @@ public class PlayGround {
 
 	public PlayGround() {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	
 		balls = new ArrayList<Ball>();
 		
@@ -22,6 +23,13 @@ public class PlayGround {
 >>>>>>> parent of 6afae7c... correccion menor
 		for (int i = 0; i < 600; i++) {
 			Food a=new Food(5);
+=======
+	
+		balls = new ArrayList<Ball>();
+		
+		for (int i = 0; i < 600; i++) {
+			Food a=new Food();
+>>>>>>> parent of f5fd159... mundo terminado
 			balls.add(a);
 		}
 	}
@@ -56,11 +64,19 @@ public class PlayGround {
 						 
 						 if(distance(balls.get(i).getPosX(),balls.get(i).getPosY(), balls.get(j).getPosX(),balls.get(j).getPosY())<balls.get(i).getRadious()+balls.get(j).getRadious()) {
 							 
+<<<<<<< HEAD
 							// if() {
 								 
 							 //}else if() {
 								 
 							 //}
+=======
+							 if() {
+								 
+							 }else if() {
+								 
+							 }
+>>>>>>> parent of f5fd159... mundo terminado
 							 
 						 }
 						 
