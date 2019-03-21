@@ -20,11 +20,11 @@ public class Ball {
 	/**
 	 * The X coordinates of a ball in space, according to the cartesian plane;
 	 */
-	private int posX;
+	private double posX;
 	/**
 	 * The Y coordinates of a ball in space, according to the cartesian plane;
 	 */
-	private int posY;
+	private double posY;
 	/**
 	 * Defines the color of a certain ball.
 	 */
@@ -77,19 +77,19 @@ public class Ball {
 		this.mass = mass;
 	}
 
-	public int getPosX() {
+	public double getPosX() {
 		return posX;
 	}
 
-	public void setPosX(int posX) {
-		this.posX = posX;
+	public void setPosX(double d) {
+		this.posX = d;
 	}
 
-	public int getPosY() {
+	public double getPosY() {
 		return posY;
 	}
 
-	public void setPosY(int posY) {
+	public void setPosY(double posY) {
 		this.posY = posY;
 	}
 

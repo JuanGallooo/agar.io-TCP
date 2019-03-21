@@ -18,15 +18,15 @@ public class Table {
 	public void crearComida() {
 		comida= new ArrayList<>();
 		for (int i = 0; i < 100; i++) {
-			Food nueva= new Food(100);
+			Food nueva= new Food();
 			comida.add(nueva);
 		}
 		jugador= new Player("Nothing");
 		
 	}
 	public void Movimiento(int x, int y) {
-		jugador.move();
 		jugador.changeDirection(x, y);
+		jugador.move();
 	}
 	public int getLargoMaximo() {
 		return largoMaximo;

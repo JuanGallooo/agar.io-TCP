@@ -2,11 +2,15 @@ package Mundo;
 
 public class Player extends Ball implements Moves{
 	
-	public final static int DEFAULT_MASS=200;
+	public final static int DEFAULT_MASS=50;
 	
-	public final static int POSITION_DELTA_MAGNITUDE=2;
+	public final static int POSITION_DELTA_MAGNITUDE=1;
 	
 	private String name;
+	
+	private int centerH;
+	
+	private int centerK;
 	
 	private double angularDireccion;
 	
@@ -19,10 +23,26 @@ public class Player extends Ball implements Moves{
 		this.name = name;
 		alive=true;
 		this.angularDireccion=0;
-		this.setPosX(50);
-		this.setPosY(50);
+		centerH=(int) (this.getPosX()+this.getRadious());
+		centerK=(int) (this.getPosY()+this.getRadious());
 	}
 	
+	public int getCenterH() {
+		return centerH;
+	}
+
+	public void setCenterH(int centerH) {
+		this.centerH = centerH;
+	}
+
+	public int getCenterK() {
+		return centerK;
+	}
+
+	public void setCenterK(int centerK) {
+		this.centerK = centerK;
+	}
+
 	/**
 	 * It adds mass to the actual ball
 	 * @param massToAdd: the mass that will be added to the ball
@@ -84,8 +104,35 @@ public class Player extends Ball implements Moves{
 	@Override
 	public void move() {
 		// TODO Auto-generated method stub
-		this.setPosX((getPosX()+(int)(Math.round(POSITION_DELTA_MAGNITUDE*Math.cos(Math.toRadians(getAngularDireccion()))))));
-		this.setPosY((getPosY()+(int)(Math.round(POSITION_DELTA_MAGNITUDE*Math.sin(Math.toRadians(getAngularDireccion()))))));
+		double deltax=Math.abs(POSITION_DELTA_MAGNITUDE*Math.cos(Math.toRadians(getAngularDireccion())));
+		double deltay=Math.abs(POSITION_DELTA_MAGNITUDE*Math.sin(Math.toRadians(getAngularDireccion())));
+		
+		
+		if(getAngularDireccion()<=90&&getAngularDireccion()>=0) {
+			this.setPosX((getPosX()+deltax));
+			this.setPosY((getPosY()-deltay));
+			this.setCenterH((int) (this.getPosX()+this.getRadious()));
+			this.setCenterK((int) (this.getPosY()+this.getRadious()));
+			
+			
+		}else if(getAngularDireccion()<=180&&getAngularDireccion()>90) {
+			this.setPosX((getPosX()-deltax));
+			this.setPosY((getPosY()-deltay));
+			this.setCenterH((int) (this.getPosX()+this.getRadious()));
+			this.setCenterK((int) (this.getPosY()+this.getRadious()));
+			
+		}else if(getAngularDireccion()<=270&&getAngularDireccion()>180) {
+			this.setPosX((getPosX()-deltax));
+			this.setPosY((getPosY()+deltay));
+			this.setCenterH((int) (this.getPosX()+this.getRadious()));
+			this.setCenterK((int) (this.getPosY()+this.getRadious()));
+			
+		}else if(getAngularDireccion()<=360&&getAngularDireccion()>=270) {
+			this.setPosX((getPosX()+deltax));
+			this.setPosY((getPosY()+deltay));
+			this.setCenterH((int) (this.getPosX()+this.getRadious()));
+			this.setCenterK((int) (this.getPosY()+this.getRadious()));
+		}
 
 		
 	}
@@ -93,11 +140,17 @@ public class Player extends Ball implements Moves{
 	 * This method updates the relative angle formed from one player to a certain x,y location in space.
 	 */
 	@Override
-	public void changeDirection(int x, int y) {
+	public void changeDirection(double x, double y) {
 		
 		if( x!=0&& y!=0) {
 			
 		double alpha=Math.toDegrees(Math.atan(y/x));
+
+		System.out.println("alpha "+alpha);
+		System.out.println("divi "+y/x);
+		System.out.println("X "+x);
+		System.out.println("Y "+y);
+		System.out.println("--------------");
 		
 		if(x>0&&y>0) {
 			
@@ -105,13 +158,13 @@ public class Player extends Ball implements Moves{
 			
 		}else if(x<0&&y>0) {
 			
-			this.setAngularDireccion(180-alpha);
+			this.setAngularDireccion(alpha+180);
 			
 		}else if(x<0&&y<0) {
 			this.setAngularDireccion(alpha+180);
 			
 		}else if(x>0&&y<0) {
-			this.setAngularDireccion(360-alpha);
+			this.setAngularDireccion(360+alpha);
 			
 		}else if(x==0&&y==0) {
 			this.setAngularDireccion(this.getAngularDireccion());
@@ -120,6 +173,7 @@ public class Player extends Ball implements Moves{
 		else {
 			this.setAngularDireccion(0);
 		}
+		System.out.println(this.getAngularDireccion());
 	}
 
 	

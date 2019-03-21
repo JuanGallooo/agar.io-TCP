@@ -12,8 +12,8 @@ public class Food extends Ball{
 		this.comido = comido;
 	}
 
-	public Food(int mass) {
-		super(mass);
+	public Food() {
+		super(DEFAULT_MASS);
 		comido= false;
 		// TODO Auto-generated constructor stub
 	}

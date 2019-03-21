@@ -28,11 +28,11 @@ public class PanelPlayGround extends JPanel implements   MouseMotionListener{
 		for (int i = 0; i < bolitas.size(); i++) {
 			Food p = bolitas.get(i);
 			g.setColor(p.getColor());
-			g.fillOval(p.getPosX(), p.getPosY(), p.getRadious(), p.getRadious());
+			g.fillOval((int)p.getPosX(), (int)p.getPosY(), p.getRadious(), p.getRadious());
 		}	
 		Player nuevo= principal.getPrincipal();
 		g.setColor(nuevo.getColor());
-		g.fillOval(nuevo.getPosX(), nuevo.getPosY(), nuevo.getRadious(), nuevo.getRadious());
+		g.fillOval((int)nuevo.getPosX(), (int)nuevo.getPosY(), nuevo.getRadious()*2, nuevo.getRadious()*2);
 	}
 
 
@@ -47,12 +47,14 @@ public class PanelPlayGround extends JPanel implements   MouseMotionListener{
 		// TODO Auto-generated method stub
 		
 		
-//		int x= Math.abs(getX() - principal.getPrincipal().getPosX());
-		int x=- 10;
-		int y=-10;
-//		int y=Math.abs(getY() - principal.getPrincipal().getPosY());
+		int x=arg0.getX()-principal.getPrincipal().getCenterH();
+		int y=principal.getPrincipal().getCenterK()-arg0.getY();
+		
+		
+		
+		
 		principal.interaccion(x,y);
-		System.out.println(arg0.getX());
-		System.out.println(arg0.getY());
+//		System.out.println(arg0.getX());
+//		System.out.println(arg0.getY());
 	}
 }
