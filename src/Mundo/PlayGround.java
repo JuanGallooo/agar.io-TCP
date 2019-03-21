@@ -11,9 +11,15 @@ public class PlayGround {
 	private ArrayList<Ball> balls;
 
 	public PlayGround() {
+<<<<<<< HEAD
 	
 		balls = new ArrayList<Ball>();
 		
+=======
+
+		ballsF = new ArrayList<Ball>();
+
+>>>>>>> parent of 6afae7c... correccion menor
 		for (int i = 0; i < 600; i++) {
 			Food a=new Food(5);
 			balls.add(a);
