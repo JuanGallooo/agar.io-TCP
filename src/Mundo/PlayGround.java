@@ -17,6 +17,8 @@ public class PlayGround {
 	public PlayGround() {
 
 		ballsF = new ArrayList<Ball>();
+		
+		ballsP=new ArrayList<Player>();
 
 		for (int i = 0; i < 600; i++) {
 			
