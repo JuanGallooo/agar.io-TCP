@@ -10,18 +10,19 @@ public class Player extends Ball implements Moves{
 	
 	private double angularDireccion;
 	
-
-	
 	private boolean alive;
 
 	public Player(String name) {
+		
 		super(DEFAULT_MASS);
+		
 		this.name = name;
+		
 		alive=true;
+		
 		this.angularDireccion=0;
 		
 	}
-	
 	/**
 	 * It adds mass to the actual ball
 	 * @param massToAdd: the mass that will be added to the ball
@@ -31,7 +32,6 @@ public class Player extends Ball implements Moves{
 		updateRadious();
 		updateArea();
 	}
-	
 	/**
 	 * It defines the state of the alive variable to false
 	 */
@@ -43,6 +43,7 @@ public class Player extends Ball implements Moves{
 		setRadious(getMass()/3);
 		
 	}
+	
 	public void updateArea() {
 		
 		double a=(Math.PI*Math.pow(getRadious(), 2));
@@ -50,8 +51,6 @@ public class Player extends Ball implements Moves{
 		setArea(a);
 	}
 	
-	
-
 	public String getName() {
 		return name;
 	}
@@ -84,9 +83,8 @@ public class Player extends Ball implements Moves{
 	public void move() {
 		// TODO Auto-generated method stub
 		this.setPosX((getPosX()+(int)(Math.round(POSITION_DELTA_MAGNITUDE*Math.cos(Math.toRadians(getAngularDireccion()))))));
-		this.setPosY((getPosY()+(int)(Math.round(POSITION_DELTA_MAGNITUDE*Math.sin(Math.toRadians(getAngularDireccion()))))));
-
 		
+		this.setPosY((getPosY()+(int)(Math.round(POSITION_DELTA_MAGNITUDE*Math.sin(Math.toRadians(getAngularDireccion()))))));	
 	}
 	/**
 	 * This method updates the relative angle formed from one player to a certain x,y location in space.
@@ -112,14 +110,6 @@ public class Player extends Ball implements Moves{
 			
 		}else if(x==0&&y==0) {
 			this.setAngularDireccion(this.getAngularDireccion());
-		}
-			
-	}
-
-	
-	
-	
-	
-	
-	
+		}		
+	}	
 }
