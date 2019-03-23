@@ -35,7 +35,7 @@ public class PanelPlayGround extends JPanel implements   MouseMotionListener{
 		}	
 		Player nuevo= principal.getPrincipal();
 		g.setColor(nuevo.getColor());
-		g.fillOval((int)nuevo.getPosX(), (int)nuevo.getPosY(), (nuevo.getRadious()+ nuevo.getMasaGanada())*2, (nuevo.getRadious()+ nuevo.getMasaGanada())*2);
+		g.fillOval((int)nuevo.getPosX(), (int)nuevo.getPosY(), (nuevo.getRadious())*2, (nuevo.getRadious())*2);
 	}
 
 

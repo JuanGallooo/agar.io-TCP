@@ -69,7 +69,7 @@ public class PlayGround {
 				}
 			}
 		}	
-		}
+	}
 	
 	/**
 	 * This method checks if any pair of players is colliding at any given time of the game.

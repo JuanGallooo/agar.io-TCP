@@ -16,7 +16,6 @@ public class Player extends Ball implements Moves{
 	
 	private double angularDireccion;
 	
-	private ArrayList<Food> comida;
 	
 	private boolean alive;
 
@@ -24,20 +23,9 @@ public class Player extends Ball implements Moves{
 		super(DEFAULT_MASS);
 		this.name = name;
 		alive=true;
-		comida=new ArrayList<Food>();
 		this.angularDireccion=0;
 		centerH=(int) (this.getPosX()+this.getRadious());
 		centerK=(int) (this.getPosY()+this.getRadious());
-	}
-	public void comer(Food a) {
-		comida.add(a);
-	}
-	public int getMasaGanada() {
-		int suma= 0;
-		for (int i = 0; i < comida.size(); i++) {
-			suma+= comida.get(i).getMass();
-		}
-		return suma;
 	}
 	
 	public int getCenterH() {

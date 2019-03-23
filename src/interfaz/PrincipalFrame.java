@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import Mundo.Food;
 import Mundo.Player;
 import conexion.Table;
+import hilos.HiloVerificarComer;
 
 @SuppressWarnings("serial")
 public class PrincipalFrame extends JFrame{
@@ -28,12 +29,16 @@ public class PrincipalFrame extends JFrame{
 		
 		panelAux= new JPanel();
 		panelAux.setLayout(new BorderLayout());
+		
 
 		
 		miPanelIngreso= new PanelIngreso(this);
 		panelAux.add(miPanelIngreso,BorderLayout.CENTER);
 
 		add(panelAux, BorderLayout.CENTER);
+		
+
+		
 		pack();
 	}
 	public static void main(String[] args) {
@@ -47,6 +52,8 @@ public class PrincipalFrame extends JFrame{
 		miPanelPlay.setFocusable(true);
 		panelAux.add(miPanelPlay, BorderLayout.CENTER);
 		setPreferredSize(new Dimension(600,600));
+		HiloVerificarComer nuevo= new HiloVerificarComer(this);
+		nuevo.start();
 		pack();
 	}
 	public ArrayList<Food> getComida() {
@@ -59,6 +66,11 @@ public class PrincipalFrame extends JFrame{
 
 	public void interaccion(int x, int y) {
 		mundo.Movimiento(x, y);
+		miPanelPlay.revalidate();
+		miPanelPlay.repaint();
+	}
+	public void verificarComer() {
+		mundo.toco();
 		miPanelPlay.revalidate();
 		miPanelPlay.repaint();
 	}
