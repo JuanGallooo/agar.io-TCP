@@ -3,6 +3,8 @@ package Mundo;
 import java.awt.Color;
 import java.util.concurrent.ThreadLocalRandom;
 
+import conexion.PlayGround;
+
 public class Ball {
 	
 	/**

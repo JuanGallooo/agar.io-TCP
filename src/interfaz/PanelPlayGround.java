@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
@@ -11,7 +12,9 @@ import javax.swing.JPanel;
 import Mundo.Ball;
 import Mundo.Food;
 import Mundo.Player;
+import hilos.HiloMovimientoMouse;
 
+@SuppressWarnings("serial")
 public class PanelPlayGround extends JPanel implements   MouseMotionListener{
 	
 	private PrincipalFrame principal;
@@ -28,11 +31,11 @@ public class PanelPlayGround extends JPanel implements   MouseMotionListener{
 		for (int i = 0; i < bolitas.size(); i++) {
 			Food p = bolitas.get(i);
 			g.setColor(p.getColor());
-			g.fillOval((int)p.getPosX(), (int)p.getPosY(), p.getRadious(), p.getRadious());
+			g.fillOval((int)p.getPosX(), (int)p.getPosY(), p.getRadious()*2, p.getRadious()*2);
 		}	
 		Player nuevo= principal.getPrincipal();
 		g.setColor(nuevo.getColor());
-		g.fillOval((int)nuevo.getPosX(), (int)nuevo.getPosY(), nuevo.getRadious()*2, nuevo.getRadious()*2);
+		g.fillOval((int)nuevo.getPosX(), (int)nuevo.getPosY(), (nuevo.getRadious()+ nuevo.getMasaGanada())*2, (nuevo.getRadious()+ nuevo.getMasaGanada())*2);
 	}
 
 
@@ -41,19 +44,22 @@ public class PanelPlayGround extends JPanel implements   MouseMotionListener{
 		// TODO Auto-generated method stub
 		
 	}
-
+	
+	private HiloMovimientoMouse hilo;
 	@Override
 	public void mouseMoved(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		if( hilo !=null) {
+			hilo.stop();
+		}
+		hilo= new HiloMovimientoMouse(principal, arg0.getX(), arg0.getY());
+		hilo.start();
 		
-		
-		int x=arg0.getX()-principal.getPrincipal().getCenterH();
-		int y=principal.getPrincipal().getCenterK()-arg0.getY();
-		
-		
-		
-		
-		principal.interaccion(x,y);
+		//hilo.run();
+		//int x=arg0.getX()-principal.getPrincipal().getCenterH();
+		//int y=principal.getPrincipal().getCenterK()-arg0.getY();
+//		int x= Math.abs(getX() - principal.getPrincipal().getPosX());
+//		int y=Math.abs(getY() - principal.getPrincipal().getPosY());
+		//principal.interaccion(x,y);
 //		System.out.println(arg0.getX());
 //		System.out.println(arg0.getY());
 	}

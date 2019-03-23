@@ -18,7 +18,7 @@ public class Food extends Ball{
 		// TODO Auto-generated constructor stub
 	}
 
-	public final static int DEFAULT_MASS=5;
+	public final static int DEFAULT_MASS=10;
 	
 
 	

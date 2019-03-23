@@ -1,6 +1,9 @@
-package Mundo;
+package conexion;
 
 import java.util.ArrayList;
+
+import Mundo.Food;
+import Mundo.Player;
 
 public class Table {
 	
@@ -24,9 +27,10 @@ public class Table {
 		jugador= new Player("Nothing");
 		
 	}
+	//
 	public void Movimiento(int x, int y) {
-		jugador.changeDirection(x, y);
 		jugador.move();
+		jugador.changeDirection(x, y);
 	}
 	public int getLargoMaximo() {
 		return largoMaximo;

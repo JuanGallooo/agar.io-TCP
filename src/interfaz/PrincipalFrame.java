@@ -5,24 +5,35 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import Mundo.Food;
 import Mundo.Player;
-import Mundo.Table;
+import conexion.Table;
 
 @SuppressWarnings("serial")
 public class PrincipalFrame extends JFrame{
 	
 	private Table mundo;
-	private PanelPlayGround miPanel;
+	private PanelPlayGround miPanelPlay;
+	private JPanel panelAux;
+	private PanelIngreso miPanelIngreso;
 
 	public PrincipalFrame(){
 		mundo= new Table();
+		
+		
 		setLayout(new BorderLayout());
-		setPreferredSize(new Dimension(600,600));
-		miPanel= new PanelPlayGround(this);
-		miPanel.setFocusable(true);
-		add(miPanel, BorderLayout.CENTER);
+		//setPreferredSize(new Dimension(600,600));
+		
+		panelAux= new JPanel();
+		panelAux.setLayout(new BorderLayout());
+
+		
+		miPanelIngreso= new PanelIngreso(this);
+		panelAux.add(miPanelIngreso,BorderLayout.CENTER);
+
+		add(panelAux, BorderLayout.CENTER);
 		pack();
 	}
 	public static void main(String[] args) {
@@ -30,7 +41,14 @@ public class PrincipalFrame extends JFrame{
 		principal.show();
 		principal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
-
+	public void cambiarAJuego() {
+		panelAux.remove(0);
+		miPanelPlay= new PanelPlayGround(this);
+		miPanelPlay.setFocusable(true);
+		panelAux.add(miPanelPlay, BorderLayout.CENTER);
+		setPreferredSize(new Dimension(600,600));
+		pack();
+	}
 	public ArrayList<Food> getComida() {
 		return mundo.getComida();
 	}
@@ -41,8 +59,8 @@ public class PrincipalFrame extends JFrame{
 
 	public void interaccion(int x, int y) {
 		mundo.Movimiento(x, y);
-		miPanel.revalidate();
-		miPanel.repaint();
+		miPanelPlay.revalidate();
+		miPanelPlay.repaint();
 	}
 
 }

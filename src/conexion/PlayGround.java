@@ -1,6 +1,10 @@
-package Mundo;
+package conexion;
 
 import java.util.ArrayList;
+
+import Mundo.Ball;
+import Mundo.Food;
+import Mundo.Player;
 
 public class PlayGround {
 

@@ -1,5 +1,7 @@
 package Mundo;
 
+import java.util.ArrayList;
+
 public class Player extends Ball implements Moves{
 	
 	public final static int DEFAULT_MASS=50;
@@ -14,7 +16,7 @@ public class Player extends Ball implements Moves{
 	
 	private double angularDireccion;
 	
-
+	private ArrayList<Food> comida;
 	
 	private boolean alive;
 
@@ -22,9 +24,20 @@ public class Player extends Ball implements Moves{
 		super(DEFAULT_MASS);
 		this.name = name;
 		alive=true;
+		comida=new ArrayList<Food>();
 		this.angularDireccion=0;
 		centerH=(int) (this.getPosX()+this.getRadious());
 		centerK=(int) (this.getPosY()+this.getRadious());
+	}
+	public void comer(Food a) {
+		comida.add(a);
+	}
+	public int getMasaGanada() {
+		int suma= 0;
+		for (int i = 0; i < comida.size(); i++) {
+			suma+= comida.get(i).getMass();
+		}
+		return suma;
 	}
 	
 	public int getCenterH() {
@@ -146,11 +159,11 @@ public class Player extends Ball implements Moves{
 			
 		double alpha=Math.toDegrees(Math.atan(y/x));
 
-		System.out.println("alpha "+alpha);
-		System.out.println("divi "+y/x);
-		System.out.println("X "+x);
-		System.out.println("Y "+y);
-		System.out.println("--------------");
+//		System.out.println("alpha "+alpha);
+//		System.out.println("divi "+y/x);
+//		System.out.println("X "+x);
+//		System.out.println("Y "+y);
+//		System.out.println("--------------");
 		
 		if(x>0&&y>0) {
 			
@@ -173,7 +186,7 @@ public class Player extends Ball implements Moves{
 		else {
 			this.setAngularDireccion(0);
 		}
-		System.out.println(this.getAngularDireccion());
+		//System.out.println(this.getAngularDireccion());
 	}
 
 	
