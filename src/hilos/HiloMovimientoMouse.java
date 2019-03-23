@@ -16,7 +16,7 @@ public class HiloMovimientoMouse extends Thread{
 	public void run(){
             while (true) { 
                 try { 
-                	if(x==principal.getPrincipal().getPosX()&& y==principal.getPrincipal().getPosY()) break; 
+                	//if(x==principal.getPrincipal().getPosX()&& y==principal.getPrincipal().getPosY()) break; 
             		int xde=x-principal.getPrincipal().getCenterH();
             		int yde=principal.getPrincipal().getCenterK()-y;
             		principal.interaccion(xde,yde);

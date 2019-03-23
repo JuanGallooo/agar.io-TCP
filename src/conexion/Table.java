@@ -59,6 +59,7 @@ public class Table {
 	/**
 	 * It calculates the distance if any pair a points in space.
 	 * @param x1 first x coordinate
+	 * 
 	 * @param y1 first y coordinate
 	 * @param x2 second x coordinate
 	 * @param y2 second y coordinate
@@ -71,7 +72,7 @@ public class Table {
 		Food retorno=null;
 		boolean toco= false;
 		for (int j = 0; j < comida.size()-1 && !toco; j++) {
-			if(distance(jugador.getPosX(),jugador.getPosY(), comida.get(j).getPosX(),comida.get(j).getPosY())<jugador.getRadious()+jugador.getRadious()) {
+			if(distance(jugador.getCenterH(),jugador.getCenterK(), comida.get(j).getPosX(),comida.get(j).getPosY())<jugador.getRadious()+jugador.getRadious()) {
 				jugador.winPoints(comida.get(j).getMass());
 				retorno= comida.get(j);
 				toco= true;

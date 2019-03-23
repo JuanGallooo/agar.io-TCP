@@ -105,10 +105,11 @@ public class Player extends Ball implements Moves{
 	@Override
 	public void move() {
 		// TODO Auto-generated method stub
+		
 		double deltax=Math.abs(POSITION_DELTA_MAGNITUDE*Math.cos(Math.toRadians(getAngularDireccion())));
 		double deltay=Math.abs(POSITION_DELTA_MAGNITUDE*Math.sin(Math.toRadians(getAngularDireccion())));
 		
-		
+		if( getAngularDireccion()!=0 ) {
 		if(getAngularDireccion()<=90&&getAngularDireccion()>=0) {
 			this.setPosX((getPosX()+deltax));
 			this.setPosY((getPosY()-deltay));
@@ -135,7 +136,8 @@ public class Player extends Ball implements Moves{
 			this.setCenterK((int) (this.getPosY()+this.getRadious()));
 		}
 
-		
+		}
+		else System.out.println(true);
 	}
 	/**
 	 * This method updates the relative angle formed from one player to a certain x,y location in space.
