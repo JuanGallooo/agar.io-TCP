@@ -1,5 +1,6 @@
 package interfaz;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -36,6 +37,8 @@ public class PanelPlayGround extends JPanel implements   MouseMotionListener{
 		Player nuevo= principal.getPrincipal();
 		g.setColor(nuevo.getColor());
 		g.fillOval((int)nuevo.getPosX(), (int)nuevo.getPosY(), (nuevo.getRadious())*2, (nuevo.getRadious())*2);
+		g.setColor(Color.black);
+		g.drawString(nuevo.getName(), nuevo.getCenterH()-10, nuevo.getCenterK()+5);
 	}
 
 

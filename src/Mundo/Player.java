@@ -1,6 +1,5 @@
 package Mundo;
 
-import java.util.ArrayList;
 
 public class Player extends Ball implements Moves{
 	

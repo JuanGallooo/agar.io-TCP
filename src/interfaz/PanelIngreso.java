@@ -108,7 +108,7 @@ public class PanelIngreso extends JPanel{
 
 	    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
 	        // TODO add your handling code here:
-	    	principal.cambiarAJuego();
+	    	principal.cambiarAJuego(jTextField1.getText());
 	    }                                        
 
 	    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         

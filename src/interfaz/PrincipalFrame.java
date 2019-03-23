@@ -46,10 +46,11 @@ public class PrincipalFrame extends JFrame{
 		principal.show();
 		principal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
-	public void cambiarAJuego() {
+	public void cambiarAJuego(String nombre) {
 		panelAux.remove(0);
 		miPanelPlay= new PanelPlayGround(this);
 		miPanelPlay.setFocusable(true);
+		mundo.setNombreJugador(nombre);
 		panelAux.add(miPanelPlay, BorderLayout.CENTER);
 		setPreferredSize(new Dimension(600,600));
 		HiloVerificarComer nuevo= new HiloVerificarComer(this);

@@ -1,5 +1,9 @@
 package conexion;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.net.InetAddress;
+import java.net.Socket;
 import java.util.ArrayList;
 
 import Mundo.Ball;
@@ -20,6 +24,15 @@ public class PlayGround {
 	private ArrayList<Ball> balls;
 
 
+	final static int ServerPort = 1234; 
+	  
+	public InetAddress ip; 
+      
+    public Socket s; 
+      
+    public DataInputStream dis; 
+    public DataOutputStream dos; 
+
 
 
 	public PlayGround() {
@@ -28,12 +41,23 @@ public class PlayGround {
 		
 		ballsP=new ArrayList<Player>();
 
-		for (int i = 0; i < 600; i++) {
+		for (int i = 0; i < 100; i++) {
 			Food a=new Food();
 			balls.add(a);
 						
 			ballsF.add(a);
 		}
+		
+		try {
+	            ip= InetAddress.getByName("localhost");
+	            s = new Socket(ip, ServerPort);
+	            
+	            dis = new DataInputStream(s.getInputStream());
+	            dos = new DataOutputStream(s.getOutputStream());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 	/**
 	 * Adds a new player to the game
