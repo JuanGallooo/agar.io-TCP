@@ -6,7 +6,7 @@ public class Player extends Ball implements Moves{
 	
 	public final static int DEFAULT_MASS=50;
 	
-	public final static int POSITION_DELTA_MAGNITUDE=1;
+	public final static int POSITION_DELTA_MAGNITUDE=2;
 	
 	private String name;
 	
@@ -137,7 +137,7 @@ public class Player extends Ball implements Moves{
 		}
 
 		}
-		else System.out.println(true);
+		else {}
 	}
 	/**
 	 * This method updates the relative angle formed from one player to a certain x,y location in space.
@@ -148,13 +148,13 @@ public class Player extends Ball implements Moves{
 		if( x!=0&& y!=0) {
 			
 		double alpha=Math.toDegrees(Math.atan(y/x));
-
+//
 //		System.out.println("alpha "+alpha);
 //		System.out.println("divi "+y/x);
 //		System.out.println("X "+x);
 //		System.out.println("Y "+y);
 //		System.out.println("--------------");
-		
+//		
 		if(x>0&&y>0) {
 			
 			this.setAngularDireccion(alpha);
@@ -170,19 +170,18 @@ public class Player extends Ball implements Moves{
 			this.setAngularDireccion(360+alpha);
 			
 		}else if(x==0&&y==0) {
-			this.setAngularDireccion(this.getAngularDireccion());
-		}
-		}
-		else {
 			this.setAngularDireccion(0);
 		}
-		//System.out.println(this.getAngularDireccion());
+//		else {
+//			this.setAngularDireccion(0);
+//		}
+	//	System.out.println(this.getAngularDireccion());
 	}
 
 	
 	
 	
-	
+	}
 	
 	
 }
