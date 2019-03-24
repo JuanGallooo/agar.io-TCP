@@ -14,14 +14,14 @@ import Mundo.Food;
 import Mundo.Player;
 import conexion.Server;
 
-public class HiloJugadorMovimiento implements Runnable{
+public class HiloEscuchaJugador implements Runnable{
     private String name; 
     final DataInputStream dis;
     final DataOutputStream dos; 
     Socket s; 
     boolean isloggedin; 
 	
-    public HiloJugadorMovimiento(Socket s, String name,DataInputStream dis, DataOutputStream dos) {
+    public HiloEscuchaJugador(Socket s, String name,DataInputStream dis, DataOutputStream dos) {
         this.dis = dis; 
         this.dos = dos; 
         this.name = name; 
@@ -38,7 +38,7 @@ public class HiloJugadorMovimiento implements Runnable{
     	            String tipo= st.nextToken();
     	            
     	            if(tipo.equals("&")) {
-                        for (HiloJugadorMovimiento mc : Server.ar)  
+                        for (HiloEscuchaJugador mc : Server.ar)  
                         { 
                         	mc.dos.writeUTF(player); 
                         } 

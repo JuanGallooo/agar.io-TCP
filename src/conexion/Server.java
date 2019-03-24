@@ -10,11 +10,11 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import Mundo.Food;
-import hilos.HiloJugadorMovimiento;
+import hilos.HiloEscuchaJugador;
 
 
 public class Server {
-	public static ArrayList<HiloJugadorMovimiento> ar= new ArrayList<HiloJugadorMovimiento>();
+	public static ArrayList<HiloEscuchaJugador> ar= new ArrayList<HiloEscuchaJugador>();
     
     static int i = 0; 
   
@@ -42,7 +42,7 @@ public class Server {
             DataInputStream dis = new DataInputStream(s.getInputStream()); 
               
             System.out.println("Creating a new handler for this player..."); 
-            HiloJugadorMovimiento mtch = new HiloJugadorMovimiento(s,"Player " + i, dis, dos); 
+            HiloEscuchaJugador mtch = new HiloEscuchaJugador(s,"Player " + i, dis, dos); 
   
             Thread t = new Thread(mtch); 
               
@@ -61,7 +61,7 @@ public class Server {
 
 	public static void broadCastingComida() {
 		try {
-			for (HiloJugadorMovimiento mc : Server.ar)  
+			for (HiloEscuchaJugador mc : Server.ar)  
 			{ 
 				String mensajePelotas="@";
 				mensajePelotas+="#"+comida.size();
