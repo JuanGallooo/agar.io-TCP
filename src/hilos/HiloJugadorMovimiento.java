@@ -11,7 +11,7 @@ import java.util.StringTokenizer;
 import Mundo.Player;
 import conexion.Server;
 
-public class HiloJugadorMovimiento extends Thread{
+public class HiloJugadorMovimiento implements Runnable{
     private String name; 
     final ObjectInputStream dis;
     final ObjectOutputStream dos; 
@@ -25,14 +25,13 @@ public class HiloJugadorMovimiento extends Thread{
         this.s = s; 
         this.isloggedin=true; 
 	}
-	@Override
     public void run() { 
         while (true)  
         { 
             try
             { 
             	Player h=(Player) dis.readObject();
-            	
+            	System.out.println("Hola recibio"+ h.getName());
 //            		received = dis.readUTF(); 
 //                    if(received.equals("logout")){ 
 //                        this.isloggedin=false; 

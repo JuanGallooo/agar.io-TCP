@@ -62,8 +62,28 @@ public class Table implements Serializable{
 			
 			//disComida = new ObjectInputStream(sComida.getInputStream());
 			//dosComida = new ObjectOutputStream(sComida.getOutputStream());
-			HiloActualizarJugadores nuevo= new HiloActualizarJugadores(dis, this);
-			nuevo.start();
+			System.out.println("entro");
+//			HiloActualizarJugadores nuevo= new HiloActualizarJugadores(s.getInputStream(), this);
+//			nuevo.run();
+            Thread readMessage = new Thread(new Runnable()  
+            { 
+                public void run() { 
+      
+                    while (true) { 
+                        try { 
+                            Player msg =(Player) dis.readObject();
+                            System.out.println("recibo jugador" + msg.getName());
+                            actualizarJugador(msg);
+                            //System.out.println(msg); 
+                        } catch (Exception e) { 
+      
+                            e.printStackTrace(); 
+                        } 
+                    } 
+                } 
+            }); 
+            readMessage.start();
+            System.out.println("salio");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -75,7 +95,6 @@ public class Table implements Serializable{
 	}
 	public void mandarInfo() {
         try { 
-        	System.out.println(true);
             dos.writeObject(jugador); 
         } catch (IOException e) { 
             e.printStackTrace(); 
