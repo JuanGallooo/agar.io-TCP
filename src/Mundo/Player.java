@@ -1,5 +1,6 @@
 package Mundo;
 
+import java.util.ArrayList;
 
 public class Player extends Ball implements Moves{
 	
@@ -15,18 +16,23 @@ public class Player extends Ball implements Moves{
 	
 	private double angularDireccion;
 	
+	private ArrayList<Food> comida;
+	
 	
 	private boolean alive;
 
 	public Player(String name) {
 		super(DEFAULT_MASS);
+		comida= new ArrayList<>();
 		this.name = name;
 		alive=true;
 		this.angularDireccion=0;
 		centerH=(int) (this.getPosX()+this.getRadious());
 		centerK=(int) (this.getPosY()+this.getRadious());
 	}
-	
+	public void agregarComido(Food c) {
+		comida.add(c);
+	}
 	public int getCenterH() {
 		return centerH;
 	}

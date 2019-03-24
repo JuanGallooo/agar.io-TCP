@@ -26,12 +26,6 @@ public class PlayGround {
 
 	final static int ServerPort = 1234; 
 	  
-	public InetAddress ip; 
-      
-    public Socket s; 
-      
-    public DataInputStream dis; 
-    public DataOutputStream dos; 
 
 
 
@@ -40,6 +34,7 @@ public class PlayGround {
 		ballsF = new ArrayList<Ball>();
 		
 		ballsP=new ArrayList<Player>();
+		balls= new ArrayList<Ball>();
 
 		for (int i = 0; i < 100; i++) {
 			Food a=new Food();
@@ -48,15 +43,6 @@ public class PlayGround {
 			ballsF.add(a);
 		}
 		
-		try {
-	            ip= InetAddress.getByName("localhost");
-	            s = new Socket(ip, ServerPort);
-	            
-	            dis = new DataInputStream(s.getInputStream());
-	            dos = new DataOutputStream(s.getOutputStream());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		
 	}
 	/**

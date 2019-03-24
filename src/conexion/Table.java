@@ -2,7 +2,9 @@ package conexion;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -24,29 +26,40 @@ public class Table {
 	private ArrayList<Player> otrosJugadores;
 	
 	
-	final static int ServerPort = 1234; 
+	final static int ServerPort = 1234;
+	final static int ServerPortComida = 1555; 
 	  
 	public InetAddress ip; 
       
     public Socket s; 
       
-    public DataInputStream dis; 
+    public ObjectInputStream dis; 
     public ObjectOutputStream dos; 
-	
-	
+    
+    
+    public Socket sComida; 
+      
+    public ObjectInputStream disComida; 
+    public ObjectOutputStream dosComida; 
 	
 	public Table() {
-		
+	
 		comida= new ArrayList<>();
 		otrosJugadores= new ArrayList<>();
 		try {
 			ip= InetAddress.getByName("localhost");
 			s = new Socket(ip, ServerPort);
 			
-			dis = new DataInputStream(s.getInputStream());
+			dis = new ObjectInputStream(s.getInputStream());
 			dos = new ObjectOutputStream(s.getOutputStream());
 			
+			//sComida = new Socket(ip, ServerPortComida);
+			
+			//disComida = new ObjectInputStream(sComida.getInputStream());
+			//dosComida = new ObjectOutputStream(sComida.getOutputStream());
+			
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		jugador= new Player("Nothing");
 	}
@@ -68,12 +81,12 @@ public class Table {
 			comida.add(nueva);
 		}
 		jugador= new Player("Nothing");
-		
 	}
 	//
 	public void Movimiento(int x, int y) {
 		jugador.move();
 		jugador.changeDirection(x, y);
+		mandarInfo();
 	}
 	public int getLargoMaximo() {
 		return largoMaximo;
@@ -126,5 +139,17 @@ public class Table {
 	}
 	public void setNombreJugador(String nombre) {
 		jugador.setName(nombre);
+	}
+	public void actualizarJugador(Player msg) {
+		boolean encontro= false;
+		for (int i = 0; i < otrosJugadores.size() && !encontro; i++) {
+			if( otrosJugadores.get(i).getName().equals(msg.getName())) {
+				otrosJugadores.set(i, msg);
+				encontro= true;
+			}
+		}
+		if(!encontro) {
+			otrosJugadores.add(msg);
+		}
 	}
 }
