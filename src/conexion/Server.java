@@ -22,7 +22,7 @@ public class Server {
 	public static void main(String[] args) throws IOException  
     { 
         // server is listening on port 1234 
-        ServerSocket ss = new ServerSocket(1234); 
+        ServerSocket ss = new ServerSocket(8000); 
         
         Socket s; 
         juego= new PlayGround();
@@ -36,8 +36,10 @@ public class Server {
             System.out.println("New client request received : " + s); 
               
             // obtain input and output streams 
-            ObjectInputStream dis = new ObjectInputStream(s.getInputStream()); 
+            System.out.println(s.getInputStream());
+            System.out.println(s.getOutputStream());
             ObjectOutputStream dos = new ObjectOutputStream(s.getOutputStream()); 
+            ObjectInputStream dis = new ObjectInputStream(s.getInputStream()); 
               
             System.out.println("Creating a new handler for this player..."); 
   

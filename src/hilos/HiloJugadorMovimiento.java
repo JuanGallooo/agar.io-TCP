@@ -31,7 +31,7 @@ public class HiloJugadorMovimiento extends Thread{
         { 
             try
             { 
-            	Object h=(Player) dis.readObject();
+            	Player h=(Player) dis.readObject();
             	
 //            		received = dis.readUTF(); 
 //                    if(received.equals("logout")){ 

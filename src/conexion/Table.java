@@ -2,18 +2,22 @@ package conexion;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 
 import Mundo.Food;
 import Mundo.Player;
+import hilos.HiloActualizarJugadores;
 
-public class Table {
+@SuppressWarnings("serial")
+public class Table implements Serializable{
 	
 	public static int ANCHO_TABLERO=600;
 	public static int LARGO_TABLERO=400;
@@ -26,7 +30,7 @@ public class Table {
 	private ArrayList<Player> otrosJugadores;
 	
 	
-	final static int ServerPort = 1234;
+	final static int ServerPort = 8000;
 	final static int ServerPortComida = 1555; 
 	  
 	public InetAddress ip; 
@@ -48,16 +52,18 @@ public class Table {
 		otrosJugadores= new ArrayList<>();
 		try {
 			ip= InetAddress.getByName("localhost");
-			s = new Socket(ip, ServerPort);
 			
-			dis = new ObjectInputStream(s.getInputStream());
+			s = new Socket(ip, ServerPort);
+			//s.getOutputStream().write("2\n".getBytes());
 			dos = new ObjectOutputStream(s.getOutputStream());
+			dis = new ObjectInputStream(s.getInputStream());
 			
 			//sComida = new Socket(ip, ServerPortComida);
 			
 			//disComida = new ObjectInputStream(sComida.getInputStream());
 			//dosComida = new ObjectOutputStream(sComida.getOutputStream());
-			
+			HiloActualizarJugadores nuevo= new HiloActualizarJugadores(dis, this);
+			nuevo.start();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -69,6 +75,7 @@ public class Table {
 	}
 	public void mandarInfo() {
         try { 
+        	System.out.println(true);
             dos.writeObject(jugador); 
         } catch (IOException e) { 
             e.printStackTrace(); 
@@ -146,10 +153,19 @@ public class Table {
 			if( otrosJugadores.get(i).getName().equals(msg.getName())) {
 				otrosJugadores.set(i, msg);
 				encontro= true;
+				System.out.println(false);
 			}
 		}
 		if(!encontro) {
+			System.out.println(true);
 			otrosJugadores.add(msg);
 		}
 	}
+	public ArrayList<Player> getOtrosJugadores() {
+		return otrosJugadores;
+	}
+	public void setOtrosJugadores(ArrayList<Player> otrosJugadores) {
+		this.otrosJugadores = otrosJugadores;
+	}
+	
 }

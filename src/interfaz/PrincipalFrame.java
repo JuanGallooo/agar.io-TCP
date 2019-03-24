@@ -75,5 +75,8 @@ public class PrincipalFrame extends JFrame{
 		miPanelPlay.revalidate();
 		miPanelPlay.repaint();
 	}
+	public ArrayList<Player> getJugadores() {
+		return mundo.getOtrosJugadores();
+	}
 
 }

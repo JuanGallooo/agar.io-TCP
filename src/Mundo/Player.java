@@ -1,8 +1,9 @@
 package Mundo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Player extends Ball implements Moves{
+public class Player extends Ball implements Moves, Serializable{
 	
 	public final static int DEFAULT_MASS=50;
 	

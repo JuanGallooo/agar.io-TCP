@@ -18,7 +18,9 @@ public class HiloActualizarJugadores extends Thread{
 		while (true) {
 			try {
             Player msg =(Player) dos.readObject();
+            System.out.println("recibo jugador" + msg.getName());
             corres.actualizarJugador(msg);
+            sleep(10);
         } catch (Exception e) { 
             e.printStackTrace(); 
         } 
