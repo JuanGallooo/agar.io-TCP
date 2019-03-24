@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.util.StringTokenizer;
 
 import Mundo.Player;
 import conexion.Table;
@@ -26,7 +27,14 @@ public class HiloActualizarJugadores implements Runnable{
 		while (true) {
 			try {
             String msg = dos.readUTF();
-            corres.actualizarJugador(msg);
+            StringTokenizer st = new StringTokenizer(msg, "#"); 
+            String tipo= st.nextToken();
+            if(tipo.equals("&")) {
+            	corres.actualizarJugador(msg);
+            }
+            else if( tipo.equals("@")) {
+            	corres.actualizarComida(msg);
+            }
         } catch (Exception e) { 
             e.printStackTrace(); 
         } 

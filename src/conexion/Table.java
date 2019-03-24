@@ -1,19 +1,15 @@
 package conexion;
 
+import java.awt.Color;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-import com.sun.xml.internal.ws.db.DatabindingImpl;
 
 import Mundo.Food;
 import Mundo.Player;
@@ -32,22 +28,13 @@ public class Table implements Serializable{
 	
 	private ArrayList<Player> otrosJugadores;
 	
-	
 	final static int ServerPort = 8000;
-	final static int ServerPortComida = 1555; 
-	  
 	public InetAddress ip; 
       
     public Socket s; 
       
     public DataInputStream dis; 
     public DataOutputStream dos; 
-    
-    
-    public Socket sComida; 
-      
-    public DataInputStream disComida; 
-    public DataOutputStream dosComida; 
 	
 	public Table() {
 	
@@ -55,52 +42,18 @@ public class Table implements Serializable{
 		otrosJugadores= new ArrayList<>();
 		try {
 			ip= InetAddress.getByName("localhost");
-			
 			s = new Socket(ip, ServerPort);
-			//s.getOutputStream().write("2\n".getBytes());
 			dis = new DataInputStream(s.getInputStream());
 			dos = new DataOutputStream(s.getOutputStream());
-			
-			//sComida = new Socket(ip, ServerPortComida);
-			
-			//disComida = new ObjectInputStream(sComida.getInputStream());
-			//dosComida = new ObjectOutputStream(sComida.getOutputStream());
-			System.out.println(true);
-			
-			
-			
 			HiloActualizarJugadores nuevo= new HiloActualizarJugadores(this);
             Thread t = new Thread(nuevo); 
             
-            System.out.println("clienthilo"); 
   
-            // add this client to active clients list 
-  
-            // start the thread. 
             t.start(); 
-//            Thread readMessage = new Thread(new Runnable()  
-//            { 
-//                public void run() { 
-//      
-//                    while (true) { 
-//                        try { 
-//                            Player msg =(Player) dis.readObject();
-//                            System.out.println("recibo jugador" + msg.getName());
-//                            actualizarJugador(msg);
-//                            //System.out.println(msg); 
-//                        } catch (Exception e) { 
-//      
-//                            e.printStackTrace(); 
-//                        } 
-//                    } 
-//                } 
-//            }); 
-//            readMessage.start();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		jugador= new Player("Nothing");
-		crearComida();
 	}
 	public DataInputStream getDis() {
 		return dis;
@@ -120,7 +73,7 @@ public class Table implements Serializable{
 	}
 	public void mandarInfo() {
         try { 
-            dos.writeUTF(jugador.getName()+"#"+jugador.getAlive()+"#"+jugador.getPosX()+"#"+jugador.getPosY()+"#"+jugador.getMass()); 
+            dos.writeUTF("&"+"#"+jugador.getName()+"#"+jugador.getAlive()+"#"+jugador.getPosX()+"#"+jugador.getPosY()+"#"+jugador.getMass()); 
         } catch (IOException e) { 
             e.printStackTrace(); 
         } 
@@ -133,7 +86,6 @@ public class Table implements Serializable{
 		}
 		jugador= new Player("Nothing");
 	}
-	//
 	public void Movimiento(int x, int y) {
 		jugador.move();
 		jugador.changeDirection(x, y);
@@ -182,11 +134,19 @@ public class Table implements Serializable{
 			if(distance(jugador.getCenterH(),jugador.getCenterK(), comida.get(j).getCenterH(),comida.get(j).getCenterK())<jugador.getRadious()+jugador.getRadious()) {
 				jugador.winPoints(1);
 				retorno= comida.get(j);
+				eliminarComida(comida.get(j));
 				toco= true;
 				comida.remove(comida.get(j));
 			}
 		}
 		return retorno;
+	}
+	private void eliminarComida(Food food) {
+        try { 
+            dos.writeUTF("@"+"#"+food.getColor().getRGB()+"#"+food.getPosX()+"#"+food.getPosY()+"#"+food.getMass()); 
+        } catch (IOException e) { 
+            e.printStackTrace(); 
+        } 
 	}
 	public void setNombreJugador(String nombre) {
 		jugador.setName(nombre);
@@ -195,6 +155,7 @@ public class Table implements Serializable{
 		
 		try {
           StringTokenizer st = new StringTokenizer(msg, "#"); 
+          st.nextToken();
           String nombre= st.nextToken(); 
           boolean alive= Boolean.parseBoolean(st.nextToken());
           double posX= Double.parseDouble(st.nextToken());
@@ -233,6 +194,32 @@ public class Table implements Serializable{
 	}
 	public void setOtrosJugadores(ArrayList<Player> otrosJugadores) {
 		this.otrosJugadores = otrosJugadores;
+	}
+	public void actualizarComida(String msg) {
+		try {
+	          StringTokenizer st = new StringTokenizer(msg, "#"); 
+	          st.nextToken();
+	          int comidaIn= Integer.parseInt(st.nextToken());
+	          comida.removeAll(comida);
+	          for (int i = 0; i < comidaIn; i++) {
+	          String color= st.nextToken();
+	          Color c= Color.decode(color);
+	          double x= Double.parseDouble(st.nextToken());
+	          double y= Double.parseDouble(st.nextToken());
+	          int mass= Integer.parseInt(st.nextToken());
+	        	  Food nueva= new Food();
+	        	  nueva.setColor(c);
+	        	  nueva.setPosX(x);
+	        	  nueva.setPosY(y);
+	        	  nueva.setMass(mass);
+	        	  nueva.updateRadious();
+	        	  nueva.updateArea();
+	        	  nueva.updateCenters();
+	        	  comida.add(nueva);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 }

@@ -16,7 +16,17 @@ public class Food extends Ball{
 	public void setComido(boolean comido) {
 		this.comido = comido;
 	}
+	public void updateRadious(){
+		setRadious(getMass()/3);
+		
+	}
 
+	public void updateArea() {
+		
+		double a=(Math.PI*Math.pow(getRadious(), 2));
+		
+		setArea(a);
+	}
 	public Food() {
 		super(DEFAULT_MASS);
 		comido= false;
@@ -27,7 +37,10 @@ public class Food extends Ball{
 
 	public final static int DEFAULT_MASS=15;
 	
-
+	public void updateCenters() {
+		centerH=(int) (this.getPosX()+this.getRadious());
+		centerK=(int) (this.getPosY()+this.getRadious());
+	}
 	public int getCenterH() {
 		return centerH;
 	}

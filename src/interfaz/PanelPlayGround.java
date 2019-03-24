@@ -30,9 +30,13 @@ public class PanelPlayGround extends JPanel implements   MouseMotionListener{
 		super.paintComponent(g);
 		ArrayList<Food> bolitas = principal.getComida();
 		for (int i = 0; i < bolitas.size(); i++) {
-			Food p = bolitas.get(i);
+			if (i<bolitas.size()) {
+				Food p = bolitas.get(i);
+			if(p !=null) {
 			g.setColor(p.getColor());
 			g.fillOval((int)p.getPosX(), (int)p.getPosY(), p.getRadious()*2, p.getRadious()*2);
+			}
+			}
 		}	
 		Player nuevo= principal.getPrincipal();
 		g.setColor(nuevo.getColor());

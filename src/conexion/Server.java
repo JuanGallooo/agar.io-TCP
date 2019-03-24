@@ -9,59 +9,69 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import Mundo.Food;
 import hilos.HiloJugadorMovimiento;
 
 
 public class Server {
 	public static ArrayList<HiloJugadorMovimiento> ar= new ArrayList<HiloJugadorMovimiento>();
     
-    // counter for clients 
     static int i = 0; 
   
-    public static PlayGround juego;
+    public static ArrayList<Food> comida;
     
     @SuppressWarnings("resource")
 	public static void main(String[] args) throws IOException  
     { 
-        // server is listening on port 1234 
         ServerSocket ss = new ServerSocket(8000); 
-        
         Socket s; 
-        juego= new PlayGround();
-        // running infinite loop for getting 
-        // client request 
+        
+		comida= new ArrayList<>();
+		for (int i = 0; i < 100; i++) {
+			Food nueva= new Food();
+			comida.add(nueva);
+		}
+        
         while (true)  
         { 
-            // Accept the incoming request 
             s = ss.accept(); 
   
             System.out.println("New client request received : " + s); 
               
-            // obtain input and output streams 
             DataOutputStream dos = new DataOutputStream(s.getOutputStream()); 
             DataInputStream dis = new DataInputStream(s.getInputStream()); 
               
             System.out.println("Creating a new handler for this player..."); 
-  
-            // Create a new handler object for handling this request. 
             HiloJugadorMovimiento mtch = new HiloJugadorMovimiento(s,"Player " + i, dis, dos); 
   
-            // Create a new Thread with this object. 
             Thread t = new Thread(mtch); 
               
             System.out.println("Adding this client to active player list"); 
-  
-            // add this client to active clients list 
+
             ar.add(mtch); 
   
-            // start the thread. 
-            t.start(); 
-  
-            // increment i for new client. 
-            // i is used for naming only, and can be replaced 
-            // by any naming scheme 
+            t.start();
+            
+            broadCastingComida();
+            
             i++; 
   
         }
-    } 
+    }
+
+	public static void broadCastingComida() {
+		try {
+			for (HiloJugadorMovimiento mc : Server.ar)  
+			{ 
+				String mensajePelotas="@";
+				mensajePelotas+="#"+comida.size();
+				for (int i = 0; i < comida.size(); i++) {
+					mensajePelotas+="#"+comida.get(i).getColor().getRGB()+"#"+comida.get(i).getPosX()+"#"+comida.get(i).getPosY()+"#"+comida.get(i).getMass();
+				}
+				mc.getDos().writeUTF(mensajePelotas); 
+			} 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	} 
 }

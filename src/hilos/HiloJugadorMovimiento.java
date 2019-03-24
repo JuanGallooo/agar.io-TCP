@@ -1,13 +1,16 @@
 package hilos;
 
+import java.awt.Color;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 
+import Mundo.Food;
 import Mundo.Player;
 import conexion.Server;
 
@@ -31,26 +34,39 @@ public class HiloJugadorMovimiento implements Runnable{
             try
             { 
             	String player=dis.readUTF();
-//            		received = dis.readUTF(); 
-//                    if(received.equals("logout")){ 
-//                        this.isloggedin=false; 
-//                        this.s.close(); 
-//                        break; 
-//                    } 
-//                    StringTokenizer st = new StringTokenizer(received, "#"); 
-//                    int x= Integer.parseInt(st.nextToken()); 
-//                    int y= Integer.parseInt(st.nextToken());
-//      
-                    for (HiloJugadorMovimiento mc : Server.ar)  
-                    { 
-                    	mc.dos.writeUTF(player); 
-                    } 
-            		
+    	            StringTokenizer st = new StringTokenizer(player, "#"); 
+    	            String tipo= st.nextToken();
+    	            
+    	            if(tipo.equals("&")) {
+                        for (HiloJugadorMovimiento mc : Server.ar)  
+                        { 
+                        	mc.dos.writeUTF(player); 
+                        } 
+    	            }
+    	            else if( tipo.equals("@")) {
+    		          String color= st.nextToken();
+    		          Color c= Color.decode(color);
+    		          double x= Double.parseDouble(st.nextToken());
+    		          double y= Double.parseDouble(st.nextToken());
+    		          int mass= Integer.parseInt(st.nextToken());
+    	            	ArrayList<Food> comidaServer=Server.comida;
+    	            	for (int i = 0; i < comidaServer.size(); i++) {
+							if( comidaServer.get(i).getPosX()==x && comidaServer.get(i).getPosY()==y) {
+								Server.comida.remove(i);
+								break;
+							}
+						}
+    	            	Server.broadCastingComida();
+    	            }
             } catch (Exception e) { 
                   
                 e.printStackTrace(); 
             } 
         }
-    } 
+    }
+	public DataOutputStream getDos() {
+		return dos;
+	} 
+    
 
 }
