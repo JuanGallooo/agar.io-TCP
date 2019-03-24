@@ -1,5 +1,6 @@
 package hilos;
 
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -7,15 +8,15 @@ import java.io.ObjectInputStream;
 import Mundo.Player;
 import conexion.Table;
 
-public class HiloActualizarJugadores extends Thread{
+public class HiloActualizarJugadores implements Runnable{
 	
-	private ObjectInputStream dos;
+	private DataInputStream dos;
 	private Table corres;
 	
-	public HiloActualizarJugadores(InputStream newe , Table t) {
+	public HiloActualizarJugadores(Table t) {
 		try {
-			dos=new ObjectInputStream(newe);
-		} catch (IOException e) {
+			dos=t.getDis();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		corres=t;
@@ -24,8 +25,7 @@ public class HiloActualizarJugadores extends Thread{
 	public void run() {
 		while (true) {
 			try {
-            Player msg =(Player) dos.readObject();
-            System.out.println("recibo jugador" + msg.getName());
+            String msg = dos.readUTF();
             corres.actualizarJugador(msg);
         } catch (Exception e) { 
             e.printStackTrace(); 

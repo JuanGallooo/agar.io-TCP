@@ -34,6 +34,10 @@ public class Player extends Ball implements Moves, Serializable{
 	public void agregarComido(Food c) {
 		comida.add(c);
 	}
+	public void updateCenters() {
+		centerH=(int) (this.getPosX()+this.getRadious());
+		centerK=(int) (this.getPosY()+this.getRadious());
+	}
 	public int getCenterH() {
 		return centerH;
 	}

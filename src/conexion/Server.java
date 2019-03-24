@@ -1,5 +1,7 @@
 package conexion;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -36,10 +38,8 @@ public class Server {
             System.out.println("New client request received : " + s); 
               
             // obtain input and output streams 
-            System.out.println(s.getInputStream());
-            System.out.println(s.getOutputStream());
-            ObjectOutputStream dos = new ObjectOutputStream(s.getOutputStream()); 
-            ObjectInputStream dis = new ObjectInputStream(s.getInputStream()); 
+            DataOutputStream dos = new DataOutputStream(s.getOutputStream()); 
+            DataInputStream dis = new DataInputStream(s.getInputStream()); 
               
             System.out.println("Creating a new handler for this player..."); 
   

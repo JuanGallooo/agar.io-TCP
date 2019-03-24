@@ -13,12 +13,12 @@ import conexion.Server;
 
 public class HiloJugadorMovimiento implements Runnable{
     private String name; 
-    final ObjectInputStream dis;
-    final ObjectOutputStream dos; 
+    final DataInputStream dis;
+    final DataOutputStream dos; 
     Socket s; 
     boolean isloggedin; 
 	
-	public HiloJugadorMovimiento(Socket s, String name,ObjectInputStream dis, ObjectOutputStream dos) {
+    public HiloJugadorMovimiento(Socket s, String name,DataInputStream dis, DataOutputStream dos) {
         this.dis = dis; 
         this.dos = dos; 
         this.name = name; 
@@ -30,8 +30,7 @@ public class HiloJugadorMovimiento implements Runnable{
         { 
             try
             { 
-            	Player h=(Player) dis.readObject();
-            	System.out.println("Hola recibio"+ h.getName());
+            	String player=dis.readUTF();
 //            		received = dis.readUTF(); 
 //                    if(received.equals("logout")){ 
 //                        this.isloggedin=false; 
@@ -44,7 +43,7 @@ public class HiloJugadorMovimiento implements Runnable{
 //      
                     for (HiloJugadorMovimiento mc : Server.ar)  
                     { 
-                    	mc.dos.writeObject(h); 
+                    	mc.dos.writeUTF(player); 
                     } 
             		
             } catch (Exception e) { 
