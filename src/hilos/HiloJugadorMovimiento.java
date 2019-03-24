@@ -33,7 +33,7 @@ public class HiloJugadorMovimiento implements Runnable{
         { 
             try
             { 
-            	String player=dis.readUTF();
+            	    String player=dis.readUTF();
     	            StringTokenizer st = new StringTokenizer(player, "#"); 
     	            String tipo= st.nextToken();
     	            
@@ -58,6 +58,7 @@ public class HiloJugadorMovimiento implements Runnable{
 						}
     	            	Server.broadCastingComida();
     	            }
+    	            //Thread.sleep(20);
             } catch (Exception e) { 
                   
                 e.printStackTrace(); 

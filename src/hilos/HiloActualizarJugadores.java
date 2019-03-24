@@ -35,6 +35,7 @@ public class HiloActualizarJugadores implements Runnable{
             else if( tipo.equals("@")) {
             	corres.actualizarComida(msg);
             }
+            //Thread.sleep(30);
         } catch (Exception e) { 
             e.printStackTrace(); 
         } 

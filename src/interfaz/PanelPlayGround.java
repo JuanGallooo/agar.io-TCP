@@ -28,7 +28,8 @@ public class PanelPlayGround extends JPanel implements   MouseMotionListener{
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		ArrayList<Food> bolitas = principal.getComida();
+		ArrayList<Food> bolitas = new ArrayList<>();
+		bolitas.addAll(principal.getComida());
 		for (int i = 0; i < bolitas.size(); i++) {
 			if (i<bolitas.size()) {
 				Food p = bolitas.get(i);

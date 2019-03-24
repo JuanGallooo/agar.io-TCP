@@ -131,12 +131,17 @@ public class Table implements Serializable{
 		Food retorno=null;
 		boolean toco= false;
 		for (int j = 0; j < comida.size()-1 && !toco; j++) {
+			if( comida.get(j)!=null) {
+				
 			if(distance(jugador.getCenterH(),jugador.getCenterK(), comida.get(j).getCenterH(),comida.get(j).getCenterK())<jugador.getRadious()+jugador.getRadious()) {
 				jugador.winPoints(1);
 				retorno= comida.get(j);
-				eliminarComida(comida.get(j));
 				toco= true;
+				if(comida.get(j)!=null) {
+				eliminarComida(comida.get(j));
 				comida.remove(comida.get(j));
+				}
+			}
 			}
 		}
 		return retorno;
@@ -155,6 +160,8 @@ public class Table implements Serializable{
 		
 		try {
           StringTokenizer st = new StringTokenizer(msg, "#"); 
+          if(msg.split(" ").length<=1) {
+        	  
           st.nextToken();
           String nombre= st.nextToken(); 
           boolean alive= Boolean.parseBoolean(st.nextToken());
@@ -174,7 +181,7 @@ public class Table implements Serializable{
 				otrosJugadores.get(i).updateCenters();
 			}
 		}
-        if(!encontro) {
+        if(!encontro && !nombre.equals(jugador.getName())) {
         	Player nuevo= new Player(nombre);
 			nuevo.setAlive(alive);
 			nuevo.setPosX(posX);
@@ -185,8 +192,10 @@ public class Table implements Serializable{
 			nuevo.updateCenters();
 			otrosJugadores.add(nuevo);
         }
+          }
 		} catch (Exception e) {
 			e.printStackTrace();
+			System.out.println(msg);
 		}
 	}
 	public ArrayList<Player> getOtrosJugadores() {
