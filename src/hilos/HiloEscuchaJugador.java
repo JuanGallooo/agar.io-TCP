@@ -13,12 +13,30 @@ import java.util.StringTokenizer;
 import Mundo.Food;
 import Mundo.Player;
 import conexion.Server;
-
+/**
+ * Thread that is use to refresh the information of the players and the table referenced to the food, this is communicated whit the server. 
+ *
+ */
 public class HiloEscuchaJugador implements Runnable{
+	/**
+	 * The name of the client
+	 */
     private String name; 
-    final DataInputStream dis;
-    final DataOutputStream dos; 
-    Socket s; 
+    /**
+     * The flush of data that becomes of the server
+     */
+    public DataInputStream dis; 
+    /**
+     * The flush of data that we use to send information relevant to the server.
+     */
+    public DataOutputStream dos; 
+	/**
+	 * This represents the socket of the table, is the media to connect to the server
+	 */
+    public Socket s;
+    /**
+     * Boolean if is logined the players in the server.
+     */
     boolean isloggedin; 
 	
     public HiloEscuchaJugador(Socket s, String name,DataInputStream dis, DataOutputStream dos) {
@@ -28,6 +46,9 @@ public class HiloEscuchaJugador implements Runnable{
         this.s = s; 
         this.isloggedin=true; 
 	}
+    /**
+     * Run of the thread
+     */
     public void run() { 
         while (true)  
         { 
@@ -65,9 +86,11 @@ public class HiloEscuchaJugador implements Runnable{
             } 
         }
     }
+    /**
+     * Method get of the DataOutputStream
+     * @return dos
+     */
 	public DataOutputStream getDos() {
 		return dos;
 	} 
-    
-
 }

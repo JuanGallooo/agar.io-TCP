@@ -15,11 +15,19 @@ import hilos.HiloEscuchaJugador;
 
 public class Server {
 	public static ArrayList<HiloEscuchaJugador> ar= new ArrayList<HiloEscuchaJugador>();
-    
-    static int i = 0; 
-  
+    /**
+     * Property that represents the numbers of client that are conected.
+     */
+    static int i = 0;
+    /**
+     * The server has the arrayList of Food that represents the food that are in the table of every playe.
+     */
     public static ArrayList<Food> comida;
-    
+    /**
+     * Main of the class
+     * @param args
+     * @throws IOException
+     */
     @SuppressWarnings("resource")
 	public static void main(String[] args) throws IOException  
     { 
@@ -58,7 +66,9 @@ public class Server {
   
         }
     }
-
+    /**
+     * This method represents the sending of the information of the food in the table
+     */
 	public static void broadCastingComida() {
 		try {
 			for (HiloEscuchaJugador mc : Server.ar)  
