@@ -39,20 +39,25 @@ public class HiloActualizarJugadores implements Runnable{
 	@Override
 	public void run() {
 		while (true) {
-			try {
-            String msg = dos.readUTF();
-            StringTokenizer st = new StringTokenizer(msg, "#"); 
-            String tipo= st.nextToken();
-            if(tipo.equals("&")) {
-            	corres.actualizarJugador(msg);
-            }
-            else if( tipo.equals("@")) {
-            	corres.actualizarComida(msg);
-            }
-            //Thread.sleep(30);
-        } catch (Exception e) { 
-            e.printStackTrace(); 
-        } 
+			if(corres.s==null) {
+				break;
+			}else {
+				try {
+					String msg = dos.readUTF();
+					StringTokenizer st = new StringTokenizer(msg, "#"); 
+					String tipo= st.nextToken();
+					if(tipo.equals("&")) {
+						corres.actualizarJugador(msg);
+						
+					}
+					else if( tipo.equals("@")) {
+						corres.actualizarComida(msg);
+					}
+					//Thread.sleep(30);
+				} catch (Exception e) { 
+					e.printStackTrace(); 
+				} 				
+			}
 		}
 	}
 }

@@ -72,6 +72,7 @@ public class PrincipalFrame extends JFrame{
 	}
 	public void verificarComer() {
 		mundo.toco();
+		mundo.CollisionPlayers();
 		miPanelPlay.revalidate();
 		miPanelPlay.repaint();
 	}

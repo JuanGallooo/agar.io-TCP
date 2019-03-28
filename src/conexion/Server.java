@@ -66,6 +66,7 @@ public class Server {
   
         }
     }
+    
     /**
      * This method represents the sending of the information of the food in the table
      */

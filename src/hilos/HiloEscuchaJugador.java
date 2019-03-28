@@ -58,11 +58,20 @@ public class HiloEscuchaJugador implements Runnable{
     	            StringTokenizer st = new StringTokenizer(player, "#"); 
     	            String tipo= st.nextToken();
     	            
+    	            
     	            if(tipo.equals("&")) {
                         for (HiloEscuchaJugador mc : Server.ar)  
                         { 
                         	mc.dos.writeUTF(player); 
-                        } 
+                        }                        
+                        String name= st.nextToken();
+                        boolean alive= Boolean.parseBoolean(st.nextToken());
+                        if(alive== false) {
+                        	
+                        	this.isloggedin= false;
+                        	this.s.close();
+                        	break;
+                        }
     	            }
     	            else if( tipo.equals("@")) {
     		          String color= st.nextToken();
@@ -86,6 +95,7 @@ public class HiloEscuchaJugador implements Runnable{
             } 
         }
     }
+    
     /**
      * Method get of the DataOutputStream
      * @return dos

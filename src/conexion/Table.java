@@ -65,6 +65,8 @@ public class Table implements Serializable{
      * The flush of data that we use to send information relevant to the server.
      */
     public DataOutputStream dos; 
+    
+    public Thread actualizar;
 	/**
 	 * The constructor of the class Table
 	 */
@@ -78,10 +80,10 @@ public class Table implements Serializable{
 			dis = new DataInputStream(s.getInputStream());
 			dos = new DataOutputStream(s.getOutputStream());
 			HiloActualizarJugadores nuevo= new HiloActualizarJugadores(this);
-            Thread t = new Thread(nuevo); 
+            actualizar = new Thread(nuevo); 
             
   
-            t.start(); 
+            actualizar.start(); 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -226,6 +228,50 @@ public class Table implements Serializable{
 		}
 		return retorno;
 	}
+	
+		public Player CollisionPlayers() {
+			Player retorno= null;
+			boolean toco= false;
+			for(int j=0; j<otrosJugadores.size()&& !toco;j++) {
+				
+				if(distance(jugador.getPosX(),jugador.getPosY(), otrosJugadores.get(j).getPosX(),otrosJugadores.get(j).getPosY())<jugador.getRadious()+otrosJugadores.get(j).getRadious()) {
+
+					if(jugador.getArea()>otrosJugadores.get(j).getArea()) {
+
+						jugador.winPoints(otrosJugadores.get(j).getMass());
+						
+						toco= true;
+						
+						mandarInfo();
+
+					}else if(jugador.getArea()<otrosJugadores.get(j).getArea()) {
+
+						retorno= jugador;
+						
+						toco= true;
+						
+						jugador.playerDies();
+
+						otrosJugadores.remove(jugador);
+						
+						mandarInfo();
+						
+						try {
+							s.close();
+							s=null;
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+					}
+			}
+			
+			
+		}
+			return retorno;
+	}
+		
 	/**
 	 * This method is used when the player eat a food , we use this new information to send to the server to say to eliminate the food
 	 * @param food the food that has eaten 
@@ -237,6 +283,7 @@ public class Table implements Serializable{
             e.printStackTrace(); 
         } 
 	}
+	
 	/**
 	 * Set of the name of the player
 	 * @param nombre
@@ -244,6 +291,9 @@ public class Table implements Serializable{
 	public void setNombreJugador(String nombre) {
 		jugador.setName(nombre);
 	}
+	
+	
+	
 	/**
 	 * This method refresh the other player in the party by the information becomes by parameter , this information is received become the server.
 	 * @param msg the information of the players.
@@ -261,30 +311,36 @@ public class Table implements Serializable{
           double posy= Double.parseDouble(st.nextToken());
           int getMass=Integer.parseInt(st.nextToken());
           boolean encontro= false;
-          for (int i = 0; i < otrosJugadores.size() && !encontro; i++) {
-			if( otrosJugadores.get(i).getName().equals(nombre)) {
-				encontro= true;
-				otrosJugadores.get(i).setAlive(alive);
-				otrosJugadores.get(i).setPosX(posX);
-				otrosJugadores.get(i).setPosY(posy);
-				otrosJugadores.get(i).setMass(getMass);
-				otrosJugadores.get(i).updateRadious();
-				otrosJugadores.get(i).updateArea();
-				otrosJugadores.get(i).updateCenters();
-			}
-		}
-        if(!encontro && !nombre.equals(jugador.getName())) {
-        	Player nuevo= new Player(nombre);
-			nuevo.setAlive(alive);
-			nuevo.setPosX(posX);
-			nuevo.setPosY(posy);
-			nuevo.setMass(getMass);
-			nuevo.updateRadious();
-			nuevo.updateArea();
-			nuevo.updateCenters();
-			otrosJugadores.add(nuevo);
-        }
+                  	  
+        	  for (int i = 0; i < otrosJugadores.size() && !encontro; i++) {
+        		  if( otrosJugadores.get(i).getName().equals(nombre)) {
+        			  if(alive==true) {
+        				  encontro= true;
+        				  otrosJugadores.get(i).setAlive(alive);
+        				  otrosJugadores.get(i).setPosX(posX);
+        				  otrosJugadores.get(i).setPosY(posy);
+        				  otrosJugadores.get(i).setMass(getMass);
+        				  otrosJugadores.get(i).updateRadious();
+        				  otrosJugadores.get(i).updateArea();
+        				  otrosJugadores.get(i).updateCenters();        				  
+        			  }else {
+        				  otrosJugadores.remove(otrosJugadores.get(i));
+        			  }
+        		  }
+        	  }
+        	  if(!encontro && !nombre.equals(jugador.getName())) {
+        		  Player nuevo= new Player(nombre);
+        		  nuevo.setAlive(alive);
+        		  nuevo.setPosX(posX);
+        		  nuevo.setPosY(posy);
+        		  nuevo.setMass(getMass);
+        		  nuevo.updateRadious();
+        		  nuevo.updateArea();
+        		  nuevo.updateCenters();
+        		  otrosJugadores.add(nuevo);
+        	  }
           }
+          
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println(msg);
