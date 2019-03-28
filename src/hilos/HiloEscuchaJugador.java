@@ -67,7 +67,6 @@ public class HiloEscuchaJugador implements Runnable{
                         String name= st.nextToken();
                         boolean alive= Boolean.parseBoolean(st.nextToken());
                         if(alive== false) {
-                        	
                         	this.isloggedin= false;
                         	this.s.close();
                         	break;

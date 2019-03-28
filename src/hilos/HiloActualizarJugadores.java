@@ -48,7 +48,6 @@ public class HiloActualizarJugadores implements Runnable{
 					String tipo= st.nextToken();
 					if(tipo.equals("&")) {
 						corres.actualizarJugador(msg);
-						
 					}
 					else if( tipo.equals("@")) {
 						corres.actualizarComida(msg);

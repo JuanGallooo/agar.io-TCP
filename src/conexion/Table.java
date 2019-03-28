@@ -133,9 +133,11 @@ public class Table implements Serializable{
 	 * @param y the new posY
 	 */
 	public void Movimiento(int x, int y) {
+		if( jugador.getAlive()) {
 		jugador.move();
 		jugador.changeDirection(x, y);
 		mandarInfo();
+		}
 	}
 	/**
 	 * Get of the max length 
@@ -234,33 +236,28 @@ public class Table implements Serializable{
 			boolean toco= false;
 			for(int j=0; j<otrosJugadores.size()&& !toco;j++) {
 				
-				if(distance(jugador.getPosX(),jugador.getPosY(), otrosJugadores.get(j).getPosX(),otrosJugadores.get(j).getPosY())<jugador.getRadious()+otrosJugadores.get(j).getRadious()) {
+				if(distance(jugador.getCenterH(),jugador.getCenterK(), otrosJugadores.get(j).getCenterH(),otrosJugadores.get(j).getCenterK())<(jugador.getRadious()+otrosJugadores.get(j).getRadious())/10) {
 
-					if(jugador.getArea()>otrosJugadores.get(j).getArea()) {
+					if(jugador.getArea()>otrosJugadores.get(j).getArea() && otrosJugadores.get(j).getAlive()) {
 
 						jugador.winPoints(otrosJugadores.get(j).getMass());
-						
 						toco= true;
-						
 						mandarInfo();
-
+						otrosJugadores.get(j).setAlive(false);
 					}else if(jugador.getArea()<otrosJugadores.get(j).getArea()) {
-
+						
 						retorno= jugador;
-						
+						if(jugador.getAlive()) {
 						toco= true;
-						
 						jugador.playerDies();
-
-						otrosJugadores.remove(jugador);
-						
 						mandarInfo();
-						
+						}
 						try {
-							s.close();
-							s=null;
+							if(s!=null) {
+								s.close();
+								s=null;
+							}
 						} catch (IOException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 
@@ -316,6 +313,7 @@ public class Table implements Serializable{
         		  if( otrosJugadores.get(i).getName().equals(nombre)) {
         			  if(alive==true) {
         				  encontro= true;
+        				  if( otrosJugadores.get(i).getAlive()) {
         				  otrosJugadores.get(i).setAlive(alive);
         				  otrosJugadores.get(i).setPosX(posX);
         				  otrosJugadores.get(i).setPosY(posy);
@@ -323,12 +321,14 @@ public class Table implements Serializable{
         				  otrosJugadores.get(i).updateRadious();
         				  otrosJugadores.get(i).updateArea();
         				  otrosJugadores.get(i).updateCenters();        				  
+        				  }
         			  }else {
         				  otrosJugadores.remove(otrosJugadores.get(i));
+        				  encontro=true;
         			  }
         		  }
         	  }
-        	  if(!encontro && !nombre.equals(jugador.getName())) {
+        	  if(!encontro && !nombre.equals(jugador.getName()) && alive==true) {
         		  Player nuevo= new Player(nombre);
         		  nuevo.setAlive(alive);
         		  nuevo.setPosX(posX);

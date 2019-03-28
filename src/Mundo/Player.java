@@ -164,7 +164,7 @@ public class Player extends Ball implements Moves, Serializable{
 //		System.out.println("X "+x);
 //		System.out.println("Y "+y);
 //		System.out.println("--------------");
-//		
+		
 		if(x>0&&y>0) {
 			
 			this.setAngularDireccion(alpha);

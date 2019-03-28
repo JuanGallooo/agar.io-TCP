@@ -2,6 +2,8 @@ package interfaz;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -22,9 +24,19 @@ public class PanelPlayGround extends JPanel implements   MouseMotionListener{
 	
 	public PanelPlayGround(PrincipalFrame p) {
 		principal= p;
+	    hilo= new HiloMovimientoMouse(principal, this, a.x, a.y);
+		hilo.start();
 		addMouseMotionListener(this);
 	}
 	
+	public Point getA() {
+		return a;
+	}
+
+	public void setA(Point a) {
+		this.a = a;
+	}
+
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -48,10 +60,12 @@ public class PanelPlayGround extends JPanel implements   MouseMotionListener{
 		
 		for (int i = 0; i < juga.size(); i++) {
 			 nuevo= juga.get(i);
+			 if( nuevo.getAlive()) {
 			g.setColor(nuevo.getColor());
 			g.fillOval((int)nuevo.getPosX(), (int)nuevo.getPosY(), (nuevo.getRadious())*2, (nuevo.getRadious())*2);
 			g.setColor(Color.black);
 			g.drawString(nuevo.getName(), nuevo.getCenterH()-10, nuevo.getCenterK()+5);
+			 }
 		}
 	}
 
@@ -63,14 +77,16 @@ public class PanelPlayGround extends JPanel implements   MouseMotionListener{
 	}
 	
 	private HiloMovimientoMouse hilo;
+	Point a= MouseInfo.getPointerInfo().getLocation();
+	
 	@Override
 	public void mouseMoved(MouseEvent arg0) {
-		if( hilo !=null) {
-			hilo.stop();
-		}
-		hilo= new HiloMovimientoMouse(principal, arg0.getX(), arg0.getY());
-		hilo.start();
-		
+		a= MouseInfo.getPointerInfo().getLocation();
+		//if( hilo !=null) {
+			//hilo.stop();
+		//}
+		//hilo= new HiloMovimientoMouse(principal, arg0.getX(), arg0.getY());
+		//hilo.start();
 		//hilo.run();
 		//int x=arg0.getX()-principal.getPrincipal().getCenterH();
 		//int y=principal.getPrincipal().getCenterK()-arg0.getY();
