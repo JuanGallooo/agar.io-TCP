@@ -122,11 +122,24 @@ public class Table implements Serializable{
 	 */
 	public void mandarInfo() {
         try { 
-            dos.writeUTF("&"+"#"+jugador.getName()+"#"+jugador.getAlive()+"#"+jugador.getPosX()+"#"+jugador.getPosY()+"#"+jugador.getMass()); 
+        	DataOutputStream nuevo = new DataOutputStream(s.getOutputStream());
+        	setDos(nuevo);
+        	
+        	dos.flush();
+            dos.writeUTF("&"+"#"+jugador.getName()+"#"+jugador.getAlive()+"#"+round(jugador.getPosX())+"#"+round(jugador.getPosY())+"#"+jugador.getMass());
+            
+          //  System.out.println("&"+"#"+jugador.getName()+"#"+jugador.getAlive()+"#"+round(jugador.getPosX())+"#"+round(jugador.getPosY())+"#"+jugador.getMass());
+            dos.flush();
         } catch (IOException e) { 
             e.printStackTrace(); 
         } 
 	}
+	
+	
+	public double round(double entry) {
+		return Math.round(entry * 1000000) / 1000000;
+	}
+	
 	/**
 	 * This method used to move the player to an x and an y recived by parameter, then change the direction of the player and send the new information 
 	 * @param x the new posX
@@ -275,7 +288,7 @@ public class Table implements Serializable{
 	 */
 	private void eliminarComida(Food food) {
         try { 
-            dos.writeUTF("@"+"#"+food.getColor().getRGB()+"#"+food.getPosX()+"#"+food.getPosY()+"#"+food.getMass()); 
+            dos.writeUTF("@"+"#"+food.getColor().getRGB()+"#"+round(food.getPosX())+"#"+round(food.getPosY())+"#"+food.getMass()); 
         } catch (IOException e) { 
             e.printStackTrace(); 
         } 

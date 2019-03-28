@@ -52,7 +52,7 @@ public class HiloActualizarJugadores implements Runnable{
 					else if( tipo.equals("@")) {
 						corres.actualizarComida(msg);
 					}
-					//Thread.sleep(30);
+					Thread.sleep(1000);
 				} catch (Exception e) { 
 					e.printStackTrace(); 
 				} 				

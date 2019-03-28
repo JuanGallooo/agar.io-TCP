@@ -77,7 +77,7 @@ public class Server {
 				String mensajePelotas="@";
 				mensajePelotas+="#"+comida.size();
 				for (int i = 0; i < comida.size(); i++) {
-					mensajePelotas+="#"+comida.get(i).getColor().getRGB()+"#"+comida.get(i).getPosX()+"#"+comida.get(i).getPosY()+"#"+comida.get(i).getMass();
+					mensajePelotas+="#"+comida.get(i).getColor().getRGB()+"#"+round(comida.get(i).getPosX())+"#"+round(comida.get(i).getPosY())+"#"+comida.get(i).getMass();
 				}
 				mc.getDos().writeUTF(mensajePelotas); 
 			} 
@@ -85,4 +85,7 @@ public class Server {
 			e.printStackTrace();
 		}
 	} 
+	public static double round(double entry) {
+		return Math.round(entry * 1000000) / 1000000;
+	}
 }

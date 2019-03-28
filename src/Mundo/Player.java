@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class Player extends Ball implements Moves, Serializable{
 	
-	public final static int DEFAULT_MASS=50;
+	public final static int DEFAULT_MASS=51;
 	
 	public final static int POSITION_DELTA_MAGNITUDE=2;
 	

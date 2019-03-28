@@ -52,6 +52,11 @@ public class HiloEscuchaJugador implements Runnable{
     public void run() { 
         while (true)  
         { 
+        	
+        	
+        	if(isloggedin!= false) {
+        		
+        	
             try
             { 
             	    String player=dis.readUTF();
@@ -74,10 +79,10 @@ public class HiloEscuchaJugador implements Runnable{
     	            }
     	            else if( tipo.equals("@")) {
     		          String color= st.nextToken();
-    		          Color c= Color.decode(color);
+    		        Color c= Color.decode(color);
     		          double x= Double.parseDouble(st.nextToken());
     		          double y= Double.parseDouble(st.nextToken());
-    		          int mass= Integer.parseInt(st.nextToken());
+    		         // int mass= Integer.parseInt(st.nextToken());
     	            	ArrayList<Food> comidaServer=Server.comida;
     	            	for (int i = 0; i < comidaServer.size(); i++) {
 							if( comidaServer.get(i).getPosX()==x && comidaServer.get(i).getPosY()==y) {
@@ -87,11 +92,14 @@ public class HiloEscuchaJugador implements Runnable{
 						}
     	            	Server.broadCastingComida();
     	            }
-    	            //Thread.sleep(20);
+    	            Thread.sleep(1000);
             } catch (Exception e) { 
                   
                 e.printStackTrace(); 
             } 
+        	}else {
+        		System.out.println("el puto amo");
+        	}
         }
     }
     
