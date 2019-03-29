@@ -74,6 +74,10 @@ public class Table implements Serializable{
 	
 		comida= new ArrayList<>();
 		otrosJugadores= new ArrayList<>();
+
+		jugador= new Player("Nothing");
+	}
+	public void conectarAServidor() {
 		try {
 			ip= InetAddress.getByName("localhost");
 			s = new Socket(ip, ServerPort);
@@ -81,14 +85,13 @@ public class Table implements Serializable{
 			dos = new DataOutputStream(s.getOutputStream());
 			HiloActualizarJugadores nuevo= new HiloActualizarJugadores(this);
             actualizar = new Thread(nuevo); 
-            
   
             actualizar.start(); 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		jugador= new Player("Nothing");
 	}
+	
 	/**
 	 * This method return the DataInputStream initialized in the class
 	 * @return dis

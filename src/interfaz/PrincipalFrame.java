@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import Mundo.Food;
@@ -23,21 +24,15 @@ public class PrincipalFrame extends JFrame{
 	public PrincipalFrame(){
 		mundo= new Table();
 		
-		
 		setLayout(new BorderLayout());
-		//setPreferredSize(new Dimension(600,600));
 		
 		panelAux= new JPanel();
 		panelAux.setLayout(new BorderLayout());
-		
-
 		
 		miPanelIngreso= new PanelIngreso(this);
 		panelAux.add(miPanelIngreso,BorderLayout.CENTER);
 
 		add(panelAux, BorderLayout.CENTER);
-		
-
 		
 		pack();
 	}
@@ -51,6 +46,7 @@ public class PrincipalFrame extends JFrame{
 		miPanelPlay= new PanelPlayGround(this);
 		miPanelPlay.setFocusable(true);
 		mundo.setNombreJugador(nombre);
+		mundo.conectarAServidor();
 		panelAux.add(miPanelPlay, BorderLayout.CENTER);
 		setPreferredSize(new Dimension(600,600));
 		HiloVerificarComer nuevo= new HiloVerificarComer(this);
@@ -66,9 +62,19 @@ public class PrincipalFrame extends JFrame{
 	}
 
 	public void interaccion(int x, int y) {
+		if(getPrincipal().getAlive()) {
+			
 		mundo.Movimiento(x, y);
 		miPanelPlay.revalidate();
 		miPanelPlay.repaint();
+		}
+		else {
+			JOptionPane.showMessageDialog(this, "Has muerto","Muerto",JOptionPane.INFORMATION_MESSAGE);
+			mundo= new Table();
+			panelAux.remove(0);
+			panelAux.add(miPanelIngreso,BorderLayout.CENTER);
+			pack();
+		}
 	}
 	public void verificarComer() {
 		mundo.toco();
