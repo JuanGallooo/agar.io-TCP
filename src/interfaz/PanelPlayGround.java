@@ -28,7 +28,6 @@ public class PanelPlayGround extends JPanel implements   MouseMotionListener{
 		hilo.start();
 		addMouseMotionListener(this);
 	}
-	
 	public Point getA() {
 		return a;
 	}
@@ -74,6 +73,9 @@ public class PanelPlayGround extends JPanel implements   MouseMotionListener{
 	public void mouseDragged(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 		
+	}
+	public void disconnect() {
+		hilo.stop();
 	}
 	
 	private HiloMovimientoMouse hilo;

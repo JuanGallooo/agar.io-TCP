@@ -41,6 +41,9 @@ public class Table implements Serializable{
 	 * This parameter represents the player in the table
 	 */
 	private Player jugador;
+	
+	private Boolean conected;
+
 	/**
 	 * This parameter of type array represents the players that are in the table except the principal player, this is use to see the collisions 
 	 */
@@ -71,7 +74,7 @@ public class Table implements Serializable{
 	 * The constructor of the class Table
 	 */
 	public Table() {
-	
+		conected= false;
 		comida= new ArrayList<>();
 		otrosJugadores= new ArrayList<>();
 
@@ -85,8 +88,8 @@ public class Table implements Serializable{
 			dos = new DataOutputStream(s.getOutputStream());
 			HiloActualizarJugadores nuevo= new HiloActualizarJugadores(this);
             actualizar = new Thread(nuevo); 
-  
             actualizar.start(); 
+            conected= true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -125,11 +128,11 @@ public class Table implements Serializable{
 	 */
 	public void mandarInfo() {
         try { 
-        	DataOutputStream nuevo = new DataOutputStream(s.getOutputStream());
-        	setDos(nuevo);
+        	//DataOutputStream nuevo = new DataOutputStream(s.getOutputStream());
+        	//setDos(nuevo);
         	
-        	dos.flush();
             dos.writeUTF("&"+"#"+jugador.getName()+"#"+jugador.getAlive()+"#"+round(jugador.getPosX())+"#"+round(jugador.getPosY())+"#"+jugador.getMass());
+            dos.flush();
             
           //  System.out.println("&"+"#"+jugador.getName()+"#"+jugador.getAlive()+"#"+round(jugador.getPosX())+"#"+round(jugador.getPosY())+"#"+jugador.getMass());
             dos.flush();
@@ -267,6 +270,7 @@ public class Table implements Serializable{
 						toco= true;
 						jugador.playerDies();
 						mandarInfo();
+						conected= false;
 						}
 						try {
 							if(s!=null) {
@@ -407,4 +411,10 @@ public class Table implements Serializable{
 		}
 	}
 	
+	public Boolean getConected() {
+		return conected;
+	}
+	public void setConected(Boolean conected) {
+		this.conected = conected;
+	}
 }

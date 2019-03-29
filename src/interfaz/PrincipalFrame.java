@@ -62,6 +62,7 @@ public class PrincipalFrame extends JFrame{
 	}
 
 	public void interaccion(int x, int y) {
+	    if( mundo.getConected()) {
 		if(getPrincipal().getAlive()) {
 			
 		mundo.Movimiento(x, y);
@@ -71,16 +72,20 @@ public class PrincipalFrame extends JFrame{
 		else {
 			JOptionPane.showMessageDialog(this, "Has muerto","Muerto",JOptionPane.INFORMATION_MESSAGE);
 			mundo= new Table();
+			miPanelPlay.disconnect();
 			panelAux.remove(0);
 			panelAux.add(miPanelIngreso,BorderLayout.CENTER);
 			pack();
 		}
+	    }
 	}
 	public void verificarComer() {
+		if(getPrincipal().getAlive() && mundo.getConected()) {
 		mundo.toco();
 		mundo.CollisionPlayers();
 		miPanelPlay.revalidate();
 		miPanelPlay.repaint();
+		}
 	}
 	public ArrayList<Player> getJugadores() {
 		return mundo.getOtrosJugadores();
