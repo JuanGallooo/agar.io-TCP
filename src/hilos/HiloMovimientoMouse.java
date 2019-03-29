@@ -46,7 +46,7 @@ public class HiloMovimientoMouse extends Thread{
             		int xde=e.getA().x-principal.getPrincipal().getCenterH();
             		int yde=principal.getPrincipal().getCenterK()-e.getA().y;
             		principal.interaccion(xde,yde);
-            		sleep(15);
+            		sleep(15*5);
                 } catch (Exception e) { 
 
                     e.printStackTrace(); 

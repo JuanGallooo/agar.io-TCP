@@ -3,14 +3,13 @@ package conexion;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
 import Mundo.Food;
 import hilos.HiloEscuchaJugador;
+import hilos.HiloServidorSSL;
 
 
 public class Server {
@@ -40,30 +39,28 @@ public class Server {
 			comida.add(nueva);
 		}
         
+		HiloServidorSSL hiloSSL= new HiloServidorSSL();
+		
+        Thread t = new Thread(hiloSSL); 
+        
+        System.out.println("Start the server of the SSL conection"); 
+
+        t.start(); 
+		
         while (true)  
         { 
             s = ss.accept(); 
-  
             System.out.println("New client request received : " + s); 
-              
             DataOutputStream dos = new DataOutputStream(s.getOutputStream()); 
             DataInputStream dis = new DataInputStream(s.getInputStream()); 
-              
             System.out.println("Creating a new handler for this player..."); 
             HiloEscuchaJugador mtch = new HiloEscuchaJugador(s,"Player " + i, dis, dos); 
-  
-            Thread t = new Thread(mtch); 
-              
+            Thread c = new Thread(mtch); 
             System.out.println("Adding this client to active player list"); 
-
             ar.add(mtch); 
-  
-            t.start();
-            
+            c.start();
             broadCastingComida();
-            
             i++; 
-  
         }
     }
     

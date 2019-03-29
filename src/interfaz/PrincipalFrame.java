@@ -22,6 +22,7 @@ public class PrincipalFrame extends JFrame{
 	private PanelIngreso miPanelIngreso;
 
 	public PrincipalFrame(){
+		
 		mundo= new Table();
 		
 		setLayout(new BorderLayout());
@@ -62,19 +63,22 @@ public class PrincipalFrame extends JFrame{
 	}
 
 	public void interaccion(int x, int y) {
-	    if( mundo.getConected()) {
+	    if(mundo.getConected()) {
 		if(getPrincipal().getAlive()) {
-			
 		mundo.Movimiento(x, y);
 		miPanelPlay.revalidate();
 		miPanelPlay.repaint();
 		}
 		else {
-			JOptionPane.showMessageDialog(this, "Has muerto","Muerto",JOptionPane.INFORMATION_MESSAGE);
 			mundo= new Table();
+			System.out.println(true+ "Nada");
 			miPanelPlay.disconnect();
 			panelAux.remove(0);
+			
+			miPanelIngreso= new PanelIngreso(this);
 			panelAux.add(miPanelIngreso,BorderLayout.CENTER);
+			
+			JOptionPane.showMessageDialog(this, "Has muerto","Muerto",JOptionPane.INFORMATION_MESSAGE);
 			pack();
 		}
 	    }
@@ -89,6 +93,12 @@ public class PrincipalFrame extends JFrame{
 	}
 	public ArrayList<Player> getJugadores() {
 		return mundo.getOtrosJugadores();
+	}
+	public void iniciarSesion(String text, char[] password) {
+	  String contrasena= String.valueOf(password);
+	}
+	public void registrarUsuario(String text, char[] password) {
+		String contrasena= String.valueOf(password);
 	}
 
 }

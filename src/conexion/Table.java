@@ -4,12 +4,18 @@ import java.awt.Color;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
+
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 import Mundo.Food;
 import Mundo.Player;
@@ -69,7 +75,13 @@ public class Table implements Serializable{
      */
     public DataOutputStream dos; 
     
-    public Thread actualizar;
+    private Thread actualizar;
+    
+    private ObjectOutputStream salidaSSL;
+    
+    private ObjectInputStream entradaSSL;
+    
+    private SSLSocket sslsocket;
 	/**
 	 * The constructor of the class Table
 	 */
@@ -79,6 +91,8 @@ public class Table implements Serializable{
 		otrosJugadores= new ArrayList<>();
 
 		jugador= new Player("Nothing");
+		
+		System.setProperty("javax.net.ssl.trustStore", "./resources/MyServer.jks");
 	}
 	public void conectarAServidor() {
 		try {
@@ -91,6 +105,21 @@ public class Table implements Serializable{
             actualizar.start(); 
             conected= true;
 		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	public void conectarSSL() {
+		try {
+			SSLSocketFactory f = (SSLSocketFactory) SSLSocketFactory.getDefault();
+			sslsocket = (SSLSocket) f.createSocket("localhost", 6500);
+			sslsocket.startHandshake();
+			
+			System.out.println("Authentication done");
+			
+			salidaSSL = new ObjectOutputStream(sslsocket.getOutputStream());
+			entradaSSL = new ObjectInputStream(sslsocket.getInputStream());
+		}
+		catch(Exception e){
 			e.printStackTrace();
 		}
 	}
@@ -233,15 +262,15 @@ public class Table implements Serializable{
 	public Food toco() {
 		Food retorno=null;
 		boolean toco= false;
+		
 		for (int j = 0; j < comida.size()-1 && !toco; j++) {
 			if( comida.get(j)!=null) {
-				
 			if(distance(jugador.getCenterH(),jugador.getCenterK(), comida.get(j).getCenterH(),comida.get(j).getCenterK())<jugador.getRadious()+jugador.getRadious()) {
 				jugador.winPoints(1);
 				retorno= comida.get(j);
 				toco= true;
 				if(comida.get(j)!=null) {
-				eliminarComida(comida.get(j));
+			    eliminarComida(retorno);
 				comida.remove(comida.get(j));
 				}
 			}
@@ -258,19 +287,17 @@ public class Table implements Serializable{
 				if(distance(jugador.getCenterH(),jugador.getCenterK(), otrosJugadores.get(j).getCenterH(),otrosJugadores.get(j).getCenterK())<(jugador.getRadious()+otrosJugadores.get(j).getRadious())/10) {
 
 					if(jugador.getArea()>otrosJugadores.get(j).getArea() && otrosJugadores.get(j).getAlive()) {
-
 						jugador.winPoints(otrosJugadores.get(j).getMass());
 						toco= true;
-						mandarInfo();
 						otrosJugadores.get(j).setAlive(false);
-					}else if(jugador.getArea()<otrosJugadores.get(j).getArea()) {
-						
+						mandarInfo();
+					}else if(jugador.getArea()<otrosJugadores.get(j).getArea()&& otrosJugadores.get(j).getAlive()) {
 						retorno= jugador;
 						if(jugador.getAlive()) {
+					    System.out.println("Acabe de morir");
 						toco= true;
 						jugador.playerDies();
 						mandarInfo();
-						conected= false;
 						}
 						try {
 							if(s!=null) {
@@ -320,7 +347,6 @@ public class Table implements Serializable{
 		try {
           StringTokenizer st = new StringTokenizer(msg, "#"); 
           if(msg.split(" ").length<=1) {
-        	  
           st.nextToken();
           String nombre= st.nextToken(); 
           boolean alive= Boolean.parseBoolean(st.nextToken());
@@ -328,7 +354,6 @@ public class Table implements Serializable{
           double posy= Double.parseDouble(st.nextToken());
           int getMass=Integer.parseInt(st.nextToken());
           boolean encontro= false;
-                  	  
         	  for (int i = 0; i < otrosJugadores.size() && !encontro; i++) {
         		  if( otrosJugadores.get(i).getName().equals(nombre)) {
         			  if(alive==true) {

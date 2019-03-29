@@ -74,8 +74,12 @@ public class PanelPlayGround extends JPanel implements   MouseMotionListener{
 		// TODO Auto-generated method stub
 		
 	}
-	public void disconnect() {
-		hilo.stop();
+	public void disconnect(){
+		try {
+			hilo.wait();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private HiloMovimientoMouse hilo;

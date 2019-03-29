@@ -95,7 +95,7 @@ public class HiloEscuchaJugador implements Runnable{
 						}
     	            	Server.broadCastingComida();
     	            }
-    	            Thread.sleep(10);
+    	            Thread.sleep(10*5);
             } catch (Exception e) { 
                   
                 e.printStackTrace(); 
