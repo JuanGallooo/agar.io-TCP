@@ -26,7 +26,7 @@ public class HiloVerificarComer extends Thread{
             while (true) { 
                 try { 
             		principal.verificarComer();
-            		sleep(15);
+            		sleep(30);
                 } catch (Exception e) { 
                     e.printStackTrace(); 
                 } 

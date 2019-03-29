@@ -55,7 +55,7 @@ public class HiloActualizarJugadores implements Runnable{
 						corres.actualizarComida(msg);
 					}
 					}
-					Thread.sleep(15);
+					Thread.sleep(10);
 				} catch (Exception e) { 
 					e.printStackTrace(); 
 				} 				
