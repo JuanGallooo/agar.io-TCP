@@ -43,6 +43,8 @@ public class HiloActualizarJugadores implements Runnable{
 				break;
 			}else {
 				try {
+					if(!corres.s.isClosed()) {
+						
 					String msg = dos.readUTF();
 					StringTokenizer st = new StringTokenizer(msg, "#"); 
 					String tipo= st.nextToken();
@@ -51,6 +53,7 @@ public class HiloActualizarJugadores implements Runnable{
 					}
 					else if( tipo.equals("@")) {
 						corres.actualizarComida(msg);
+					}
 					}
 					Thread.sleep(1000);
 				} catch (Exception e) { 

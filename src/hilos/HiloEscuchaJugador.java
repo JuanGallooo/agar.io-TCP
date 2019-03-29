@@ -67,13 +67,16 @@ public class HiloEscuchaJugador implements Runnable{
     	            if(tipo.equals("&")) {
                         for (HiloEscuchaJugador mc : Server.ar)  
                         { 
-                        	mc.dos.writeUTF(player); 
+                        	if(!mc.equals(this)) {
+                        		mc.dos.writeUTF(player); 
+                        	}
                         }                        
                         String name= st.nextToken();
                         boolean alive= Boolean.parseBoolean(st.nextToken());
                         if(alive== false) {
                         	this.isloggedin= false;
                         	this.s.close();
+                        	Server.ar.remove(this);
                         	break;
                         }
     	            }
