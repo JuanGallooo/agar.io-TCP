@@ -342,7 +342,8 @@ public class Table implements Serializable{
 	 * This method refresh the other player in the party by the information becomes by parameter , this information is received become the server.
 	 * @param msg the information of the players.
 	 */
-	public void actualizarJugador(String msg) {
+	public Player actualizarJugador(String msg) {
+		Player nuevoPlayer= null;
 		
 		try {
           StringTokenizer st = new StringTokenizer(msg, "#"); 
@@ -383,6 +384,7 @@ public class Table implements Serializable{
         		  nuevo.updateArea();
         		  nuevo.updateCenters();
         		  otrosJugadores.add(nuevo);
+        		  nuevoPlayer= nuevo;
         	  }
           }
           
@@ -390,6 +392,7 @@ public class Table implements Serializable{
 			e.printStackTrace();
 			System.out.println(msg);
 		}
+		return nuevoPlayer;
 	}
 	/**
 	 * Get of the arry of others players 

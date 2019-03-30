@@ -3,7 +3,7 @@ package Mundo;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Player extends Ball implements Moves, Serializable{
+public class Player extends Ball implements Moves, Serializable, Comparable<Player>{
 	
 	public final static int DEFAULT_MASS=51;
 	
@@ -191,6 +191,18 @@ public class Player extends Ball implements Moves, Serializable{
 	
 	
 	
+	}
+	@Override
+	public int compareTo(Player o) {
+		int retorno=0;
+		if(this.getMass()>o.getMass()) {
+			retorno= 1;
+		}else if(this.getMass()<o.getMass()) {
+			retorno= -1;
+		}else {
+				retorno=this.getName().compareTo(o.name);
+		}
+		return retorno;
 	}
 	
 	

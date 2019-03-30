@@ -91,6 +91,11 @@ public class PrincipalFrame extends JFrame{
 		miPanelPlay.repaint();
 		}
 	}
+	
+	public void mostrarGanadores(String[] Ganadores) {
+		JOptionPane.showMessageDialog(this, "Primer Lugar: "+ Ganadores[0] +"\n"+ "Segundo Lugar: "+ Ganadores[1]+"\n"+ "Tercer Lugar: "+ Ganadores[2], "Ganadores", JOptionPane.INFORMATION_MESSAGE);
+	}
+	
 	public ArrayList<Player> getJugadores() {
 		return mundo.getOtrosJugadores();
 	}

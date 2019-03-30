@@ -6,8 +6,14 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
 
 import Mundo.Food;
+import Mundo.Player;
 import hilos.HiloEscuchaJugador;
 import hilos.HiloServidorSSL;
 
@@ -21,6 +27,8 @@ public class Server {
     /**
      * The server has the arrayList of Food that represents the food that are in the table of every playe.
      */
+    public static ArrayList<Player> players;
+    
     public static ArrayList<Food> comida;
     /**
      * Main of the class
@@ -30,6 +38,19 @@ public class Server {
     @SuppressWarnings("resource")
 	public static void main(String[] args) throws IOException  
     { 
+    	Server server= new Server();
+    	Timer timer= new Timer();
+    	
+    	TimerTask tarea= new TimerTask() {
+			
+			@Override
+			public void run() {
+				reiniciarJuego();				
+			}
+		};
+		
+		timer.scheduleAtFixedRate(tarea, 0, 15000);
+    	
         ServerSocket ss = new ServerSocket(8000); 
         Socket s; 
         
@@ -53,14 +74,16 @@ public class Server {
             System.out.println("New client request received : " + s); 
             DataOutputStream dos = new DataOutputStream(s.getOutputStream()); 
             DataInputStream dis = new DataInputStream(s.getInputStream()); 
-            System.out.println("Creating a new handler for this player..."); 
-            HiloEscuchaJugador mtch = new HiloEscuchaJugador(s,"Player " + i, dis, dos); 
-            Thread c = new Thread(mtch); 
-            System.out.println("Adding this client to active player list"); 
-            ar.add(mtch); 
-            c.start();
-            broadCastingComida();
-            i++; 
+            if(i<=5) {            	
+            	System.out.println("Creating a new handler for this player..."); 
+            	HiloEscuchaJugador mtch = new HiloEscuchaJugador(s,"Player " + i, dis, dos); 
+            	Thread c = new Thread(mtch); 
+            	System.out.println("Adding this client to active player list"); 
+            	ar.add(mtch); 
+            	c.start();
+            	broadCastingComida();
+            	i++; 
+            }
         }
     }
     
@@ -85,4 +108,12 @@ public class Server {
 	public static double round(double entry) {
 		return Math.round(entry * 1000000) / 1000000;
 	}
+	
+	public static void reiniciarJuego() {
+		Player[] jugadores= new Player[5];
+		Arrays.sort(players.toArray(jugadores), java.util.Collections.reverseOrder());
+		 
+	}
+	
+	 
 }

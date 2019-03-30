@@ -38,7 +38,7 @@ public class HiloEscuchaJugador implements Runnable{
      * Boolean if is logined the players in the server.
      */
     boolean isloggedin; 
-	
+    	
     public HiloEscuchaJugador(Socket s, String name,DataInputStream dis, DataOutputStream dos) {
         this.dis = dis; 
         this.dos = dos; 
@@ -113,4 +113,5 @@ public class HiloEscuchaJugador implements Runnable{
 	public DataOutputStream getDos() {
 		return dos;
 	} 
+	
 }

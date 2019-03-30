@@ -7,6 +7,7 @@ import java.io.ObjectInputStream;
 import java.util.StringTokenizer;
 
 import Mundo.Player;
+import conexion.Server;
 import conexion.Table;
 /**
  * Thread that is use to refresh the player by the server in every moment
@@ -21,6 +22,7 @@ public class HiloActualizarJugadores implements Runnable{
 	 * The table that are referents 
 	 */
 	private Table corres;
+	
 	/**
 	 * Constructor of the class
 	 * @param t the table
@@ -48,7 +50,11 @@ public class HiloActualizarJugadores implements Runnable{
 					StringTokenizer st = new StringTokenizer(msg, "#"); 
 					String tipo= st.nextToken();
 					if(tipo.equals("&")) {
-						corres.actualizarJugador(msg);
+						Player player= corres.actualizarJugador(msg);
+						if(player !=null) {
+							Server.players.add(player);
+						}
+						
 					}
 					else if( tipo.equals("@")) {
 						corres.actualizarComida(msg);
