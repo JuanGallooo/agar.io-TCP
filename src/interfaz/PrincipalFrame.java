@@ -15,6 +15,7 @@ import Mundo.Food;
 import Mundo.Player;
 import conexion.Table;
 import hilos.HiloVerificarComer;
+import conexion.*;
 
 @SuppressWarnings("serial")
 public class PrincipalFrame extends JFrame{
@@ -98,7 +99,18 @@ public class PrincipalFrame extends JFrame{
 		}
 	    }
 	}
+	
 	public void verificarComer() {
+		if(Server.reiniciar==true) {
+			Player[] ganadores= Server.Ganadores();
+			String mensaje="";
+			for(int i=0; i<2; i++) {
+				if(ganadores[i]!=null) {
+					mensaje+= (i+1) +"Lugar: "+ganadores[i].getName()+"\n";
+				}
+			}
+			JOptionPane.showMessageDialog(this,mensaje,"Ganadores",JOptionPane.INFORMATION_MESSAGE);
+		}
 		if(getPrincipal().getAlive() && mundo.getConected()) {
 		mundo.toco();
 		mundo.CollisionPlayers();

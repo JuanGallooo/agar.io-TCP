@@ -34,6 +34,8 @@ public class Server {
      */
     public static ArrayList<Player> players;
     
+    public static boolean reiniciar;
+    
     public static ArrayList<Food> comida;
     /**
      * Main of the class
@@ -42,7 +44,8 @@ public class Server {
      */
     @SuppressWarnings("resource")
 	public static void main(String[] args) throws IOException  
-    { 
+    {
+    	reiniciar= false;
     	Server server= new Server();
     	Timer timer= new Timer();
     	
@@ -50,6 +53,7 @@ public class Server {
 			
 			@Override
 			public void run() {
+				reiniciar=true;
 				reiniciarJuego();				
 			}
 		};
@@ -119,9 +123,14 @@ public class Server {
 		return Math.round(entry * 1000000) / 1000000;
 	}
 	
+	public static Player[] Ganadores() {
+		Player[] jugadores= new Player[i];
+		Arrays.sort(players.toArray(jugadores), java.util.Collections.reverseOrder());
+		return jugadores;
+	}
+	
 	public static void reiniciarJuego() {
-		Player[] jugadores= new Player[5];
-		//Arrays.sort(players.toArray(jugadores), java.util.Collections.reverseOrder());
+		
 	}
 
 	public static boolean comprobarContra(String p) {
