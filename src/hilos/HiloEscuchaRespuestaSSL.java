@@ -1,6 +1,7 @@
 package hilos;
 
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 import conexion.Table;
 
@@ -9,8 +10,9 @@ public class HiloEscuchaRespuestaSSL implements Runnable{
 	private Table tablero;
 	
 	 private ObjectInputStream entradaSSL;
-	
-	public HiloEscuchaRespuestaSSL(Table t,ObjectInputStream entrada) {
+	boolean sigue;
+	public HiloEscuchaRespuestaSSL(Table t,ObjectInputStream entrada, ObjectOutputStream salida) {
+		sigue= true;
 		tablero= t;
 		entradaSSL=entrada;
 	}
@@ -19,17 +21,19 @@ public class HiloEscuchaRespuestaSSL implements Runnable{
 	@Override
 	public void run() {
 		try {
-		while(true) {
-			if(tablero.getConected()) {
+		while(sigue) {
+			
 					String s = (String) entradaSSL.readObject();
-					tablero.setInicia(Boolean.parseBoolean(s));
-				
-			}
-			else {
-				entradaSSL.close();
-				break;
-			}
+					tablero.setInicia(s);
 		}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	public void terminar() {
+		try {
+			sigue= false;
+			entradaSSL.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

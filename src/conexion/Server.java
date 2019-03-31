@@ -136,14 +136,16 @@ public class Server {
 	public static boolean comprobarContra(String p) {
 		String[] split= p.split(" ");
 		boolean retorno= false;
+		ArrayList<String> contras= new ArrayList<String>();	
 		try {
-			File archivo = new File ("./Archivos/Arreglo.txt");
+			File archivo = new File ("./docs/usucontra.txt");
 	        FileReader fr = new FileReader (archivo);
 	        BufferedReader sr = new BufferedReader(fr);			
 	        
 	        String mensaje= sr.readLine();
 	        
-	        while (!mensaje.isEmpty() && !retorno) {
+	        while (mensaje!=null && !mensaje.isEmpty() && !retorno) {
+                contras.add(mensaje);
 				String[] u= mensaje.split(" ");
 				
 				if (u[0].equals(split[0])&& u[1].equals(split[0])) retorno=true;
@@ -153,6 +155,10 @@ public class Server {
 		if(Boolean.parseBoolean(split[2])) {
     		FileWriter fichero = new FileWriter("./docs/usucontra.txt");
             PrintWriter pw = new PrintWriter(fichero);
+			for (int i = 0; i < contras.size(); i++) {
+            pw.println(contras.get(i));
+            }
+            
             pw.println(split[0]+" "+split[1]);
             pw.close();
             retorno= true;

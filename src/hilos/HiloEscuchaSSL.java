@@ -29,17 +29,15 @@ public class HiloEscuchaSSL implements Runnable{
 	public void run() {
 	    try {
 	    	while(true){
-	    		if( is.read()!=-1 ) {
 	    			
 	            String p = (String) is.readObject();
-	            System.out.println("We got: " + p);
+	            //System.out.println("We got: " + p);
 	            
 	            boolean confirmado= Server.comprobarContra(p);
 	            String envio=""+confirmado;
 //	            os.writeObject(p.concat(p));
 	            os.writeObject(envio);
 	            os.flush();
-	    		}
 	        }
 	    } catch (Exception e) {
 	       e.printStackTrace();

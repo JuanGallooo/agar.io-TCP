@@ -90,13 +90,16 @@ public class Table implements Serializable{
     /**
      * This atribute indicates if the client is avaible to login in the server
      */
-    private boolean inicia;
+    private String inicia;
+    
+   // private boolean iniciaLogin;
     
 	/**
 	 * The constructor of the class Table
 	 */
 	public Table() {
-		inicia= false;
+		//iniciaLogin= true;
+		inicia= null;
 		conected= false;
 		comida= new ArrayList<>();
 		otrosJugadores= new ArrayList<>();
@@ -129,7 +132,7 @@ public class Table implements Serializable{
 			salidaSSL = new ObjectOutputStream(sslsocket.getOutputStream());
 			entradaSSL = new ObjectInputStream(sslsocket.getInputStream());
 			
-			HiloEscuchaRespuestaSSL nuevo= new HiloEscuchaRespuestaSSL(this, entradaSSL);
+			HiloEscuchaRespuestaSSL nuevo= new HiloEscuchaRespuestaSSL(this,entradaSSL, salidaSSL);
 			Thread iniciar= new Thread(nuevo);
 			iniciar.start();
 			
@@ -139,6 +142,7 @@ public class Table implements Serializable{
 		}
 	}
 	
+
 	public ObjectInputStream getEntradaSSL() {
 		return entradaSSL;
 	}
@@ -319,6 +323,7 @@ public class Table implements Serializable{
 						toco= true;
 						jugador.playerDies();
 						mandarInfo();
+						
 						}
 						try {
 							if(s!=null) {
@@ -466,21 +471,21 @@ public class Table implements Serializable{
 	public void setConected(Boolean conected) {
 		this.conected = conected;
 	}
-	public boolean isInicia() {
+	public String isInicia() {
 		return inicia;
 	}
-	public void setInicia(boolean inicia) {
+	public void setInicia(String inicia) {
 		this.inicia = inicia;
 	}
 	public void verificarSesion(String text, String contrasena,boolean ini) {
 		boolean crear=ini;
-		this.inicia=true;
+		//this.inicia=true;
         try { 
         	String envio= text+ " " + contrasena + " "+crear;
         	salidaSSL.writeObject(envio);
         } catch (IOException e) {
-        	System.out.println("Socket cerrado, se habilita inicio de sesion");
-            //e.printStackTrace(); 
+        	//System.out.println("Socket cerrado, se habilita inicio de sesion");
+            e.printStackTrace(); 
         } 
 	}
 
