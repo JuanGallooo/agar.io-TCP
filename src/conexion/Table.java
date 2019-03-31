@@ -20,6 +20,7 @@ import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 import Mundo.Food;
 import Mundo.Player;
 import hilos.HiloActualizarJugadores;
+import hilos.HiloEscuchaRespuestaSSL;
 
 @SuppressWarnings("serial")
 public class Table implements Serializable{
@@ -47,9 +48,10 @@ public class Table implements Serializable{
 	 * This parameter represents the player in the table
 	 */
 	private Player jugador;
-	
+	/**
+	 * This atribute represents if the client is conected to the server
+	 */
 	private Boolean conected;
-
 	/**
 	 * This parameter of type array represents the players that are in the table except the principal player, this is use to see the collisions 
 	 */
@@ -62,6 +64,7 @@ public class Table implements Serializable{
 	 * This is the IP to connect, in this case we use the localhost , the 127.0.0.1 
 	 */
 	public InetAddress ip; 
+
 	/**
 	 * This represents the socket of the table, is the media to connect to the server
 	 */
@@ -74,7 +77,9 @@ public class Table implements Serializable{
      * The flush of data that we use to send information relevant to the server.
      */
     public DataOutputStream dos; 
-    
+    /**
+     * Thread that represents if we can actualizate the players 
+     */
     private Thread actualizar;
     
     private ObjectOutputStream salidaSSL;
@@ -82,17 +87,23 @@ public class Table implements Serializable{
     private ObjectInputStream entradaSSL;
     
     private SSLSocket sslsocket;
+    /**
+     * This atribute indicates if the client is avaible to login in the server
+     */
+    private boolean inicia;
+    
 	/**
 	 * The constructor of the class Table
 	 */
 	public Table() {
+		inicia= false;
 		conected= false;
 		comida= new ArrayList<>();
 		otrosJugadores= new ArrayList<>();
 
 		jugador= new Player("Nothing");
 		
-		System.setProperty("javax.net.ssl.trustStore", "./resources/MyServer.jks");
+		System.setProperty("javax.net.ssl.trustStore", "./docs/server.jks");
 	}
 	public void conectarAServidor() {
 		try {
@@ -111,19 +122,29 @@ public class Table implements Serializable{
 	public void conectarSSL() {
 		try {
 			SSLSocketFactory f = (SSLSocketFactory) SSLSocketFactory.getDefault();
-			sslsocket = (SSLSocket) f.createSocket("localhost", 6500);
+			sslsocket = (SSLSocket) f.createSocket("localhost", 6500); 
 			sslsocket.startHandshake();
-			
 			System.out.println("Authentication done");
 			
 			salidaSSL = new ObjectOutputStream(sslsocket.getOutputStream());
 			entradaSSL = new ObjectInputStream(sslsocket.getInputStream());
+			
+			HiloEscuchaRespuestaSSL nuevo= new HiloEscuchaRespuestaSSL(this, entradaSSL);
+			Thread iniciar= new Thread(nuevo);
+			iniciar.start();
+			
 		}
 		catch(Exception e){
 			e.printStackTrace();
 		}
 	}
 	
+	public ObjectInputStream getEntradaSSL() {
+		return entradaSSL;
+	}
+	public void setEntradaSSL(ObjectInputStream entradaSSL) {
+		this.entradaSSL = entradaSSL;
+	}
 	/**
 	 * This method return the DataInputStream initialized in the class
 	 * @return dis
@@ -444,5 +465,35 @@ public class Table implements Serializable{
 	}
 	public void setConected(Boolean conected) {
 		this.conected = conected;
+	}
+	public boolean isInicia() {
+		return inicia;
+	}
+	public void setInicia(boolean inicia) {
+		this.inicia = inicia;
+	}
+	public void verificarSesion(String text, String contrasena,boolean ini) {
+		boolean crear=ini;
+        try { 
+        	String envio= text+ " " + contrasena + " "+crear;
+        	salidaSSL.writeObject(envio);
+        	this.inicia=true;
+        } catch (IOException e) {
+        	System.out.println("Socket cerrado, se habilita inicio de sesion");
+            //e.printStackTrace(); 
+        } 
+	}
+
+	public ObjectOutputStream getSalidaSSL() {
+		return salidaSSL;
+	}
+	public void setSalidaSSL(ObjectOutputStream salidaSSL) {
+		this.salidaSSL = salidaSSL;
+	}
+	public SSLSocket getSslsocket() {
+		return sslsocket;
+	}
+	public void setSslsocket(SSLSocket sslsocket) {
+		this.sslsocket = sslsocket;
 	}
 }

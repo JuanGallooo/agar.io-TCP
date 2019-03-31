@@ -7,7 +7,7 @@ public class Player extends Ball implements Moves, Serializable, Comparable<Play
 	
 	public final static int DEFAULT_MASS=51;
 	
-	public final static int POSITION_DELTA_MAGNITUDE=1;
+	public final static int POSITION_DELTA_MAGNITUDE=2;
 	
 	private String name;
 	

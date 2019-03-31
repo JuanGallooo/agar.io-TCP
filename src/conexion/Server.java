@@ -1,8 +1,13 @@
 package conexion;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -60,14 +65,19 @@ public class Server {
 			comida.add(nueva);
 		}
         
+		System.out.println("Start the server of the SSL conection"); 
+		
+		
 		HiloServidorSSL hiloSSL= new HiloServidorSSL();
 		
         Thread t = new Thread(hiloSSL); 
         
-        System.out.println("Start the server of the SSL conection"); 
 
         t.start(); 
 		
+        System.out.println("Start to wait for the clients"); 
+		
+        
         while (true)  
         { 
             s = ss.accept(); 
@@ -111,8 +121,37 @@ public class Server {
 	
 	public static void reiniciarJuego() {
 		Player[] jugadores= new Player[5];
-		Arrays.sort(players.toArray(jugadores), java.util.Collections.reverseOrder());
-		 
+		//Arrays.sort(players.toArray(jugadores), java.util.Collections.reverseOrder());
+	}
+
+	public static boolean comprobarContra(String p) {
+		String[] split= p.split(" ");
+		boolean retorno= false;
+		try {
+			File archivo = new File ("./Archivos/Arreglo.txt");
+	        FileReader fr = new FileReader (archivo);
+	        BufferedReader sr = new BufferedReader(fr);			
+	        
+	        String mensaje= sr.readLine();
+	        
+	        while (!mensaje.isEmpty() && !retorno) {
+				String[] u= mensaje.split(" ");
+				
+				if (u[0].equals(split[0])&& u[1].equals(split[0])) retorno=true;
+				mensaje= sr.readLine();
+			}
+	        sr.close();
+		if(Boolean.parseBoolean(split[2])) {
+    		FileWriter fichero = new FileWriter("./docs/usucontra.txt");
+            PrintWriter pw = new PrintWriter(fichero);
+            pw.println(split[0]+" "+split[1]);
+            pw.close();
+            retorno= true;
+		}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return retorno;
 	}
 	
 	 

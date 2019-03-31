@@ -2,6 +2,9 @@ package interfaz;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -20,23 +23,36 @@ public class PrincipalFrame extends JFrame{
 	private PanelPlayGround miPanelPlay;
 	private JPanel panelAux;
 	private PanelIngreso miPanelIngreso;
+	private PanelLogin miPanelLogin;
 
 	public PrincipalFrame(){
 		
 		mundo= new Table();
+		mundo.conectarSSL();
 		
 		setLayout(new BorderLayout());
 		
 		panelAux= new JPanel();
 		panelAux.setLayout(new BorderLayout());
 		
-		miPanelIngreso= new PanelIngreso(this);
-		panelAux.add(miPanelIngreso,BorderLayout.CENTER);
+		miPanelLogin= new PanelLogin(this);
+		
+//		miPanelIngreso= new PanelIngreso(this);
+		panelAux.add(miPanelLogin,BorderLayout.CENTER);
 
 		add(panelAux, BorderLayout.CENTER);
 		
 		pack();
 	}
+	
+	public void cambiarAIngreso() {
+		panelAux.remove(0);
+		miPanelIngreso= new PanelIngreso(this);
+		panelAux.add(miPanelIngreso,BorderLayout.CENTER);
+		repaint();
+		pack();
+	}
+	
 	public static void main(String[] args) {
 		PrincipalFrame principal= new PrincipalFrame();
 		principal.show();
@@ -71,7 +87,6 @@ public class PrincipalFrame extends JFrame{
 		}
 		else {
 			mundo= new Table();
-			System.out.println(true+ "Nada");
 			miPanelPlay.disconnect();
 			panelAux.remove(0);
 			
@@ -101,9 +116,26 @@ public class PrincipalFrame extends JFrame{
 	}
 	public void iniciarSesion(String text, char[] password) {
 	  String contrasena= String.valueOf(password);
+	  mundo.verificarSesion(text, contrasena,false);
+	  boolean inicio= mundo.isInicia();
+	  
+	  if(inicio) {
+		  JOptionPane.showMessageDialog(this, "Se ha iniciado sesion con exito","Login",JOptionPane.INFORMATION_MESSAGE);
+		  cambiarAIngreso();
+	  }
+	  else {
+		  JOptionPane.showMessageDialog(this, "Contraseña o usuario incorrecto, favor registrarse o correguir los campos","Login",JOptionPane.INFORMATION_MESSAGE);
+	  }
 	}
 	public void registrarUsuario(String text, char[] password) {
 		String contrasena= String.valueOf(password);
+		
+		mundo.verificarSesion(text, contrasena,true);
+		boolean inicio= mundo.isInicia();
+		if(inicio) {
+			  JOptionPane.showMessageDialog(this, "Se ha registrado con exito","Login",JOptionPane.INFORMATION_MESSAGE);
+			  cambiarAIngreso();
+		}
 	}
 
 }

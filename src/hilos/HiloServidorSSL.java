@@ -13,6 +13,7 @@ public class HiloServidorSSL implements Runnable{
 
 	 SSLServerSocket s;
 	public HiloServidorSSL() {
+		System.setProperty("javax.net.ssl.trustStore", "./docs/server.jks");
 		String ksPassword = "12345678";
 		String ctPassword = "12345678";
 	    String ksName = "./docs/server.jks";
@@ -41,6 +42,7 @@ public class HiloServidorSSL implements Runnable{
 			while(true){                
 	            SSLSocket sslsocket = (SSLSocket) s.accept();
 	            System.out.println("New Client accepted");
+	            
 	            HiloEscuchaSSL t = new HiloEscuchaSSL(sslsocket);
 	            Thread o= new Thread(t);
 	            o.start();      
