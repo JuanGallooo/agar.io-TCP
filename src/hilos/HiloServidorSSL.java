@@ -13,9 +13,9 @@ public class HiloServidorSSL implements Runnable{
 
 	 SSLServerSocket s;
 	public HiloServidorSSL() {
-		String ksPassword = "456987";
-		String ctPassword = "456987";
-	    String ksName = "./docs/MyServer.jks";
+		String ksPassword = "12345678";
+		String ctPassword = "12345678";
+	    String ksName = "./docs/server.jks";
 	    char ksPass[] = ksPassword.toCharArray();
 	    char ctPass[] = ctPassword.toCharArray();
 	    KeyStore ks;
