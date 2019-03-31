@@ -474,10 +474,10 @@ public class Table implements Serializable{
 	}
 	public void verificarSesion(String text, String contrasena,boolean ini) {
 		boolean crear=ini;
+		this.inicia=true;
         try { 
         	String envio= text+ " " + contrasena + " "+crear;
         	salidaSSL.writeObject(envio);
-        	this.inicia=true;
         } catch (IOException e) {
         	System.out.println("Socket cerrado, se habilita inicio de sesion");
             //e.printStackTrace(); 
