@@ -2,8 +2,7 @@ package Mundo;
 
 import java.awt.Color;
 import java.util.concurrent.ThreadLocalRandom;
-
-import conexion.PlayGround;
+import conexion.Table;
 
 public class Ball {
 	
@@ -48,9 +47,9 @@ public class Ball {
 		
 		this.area = Math.PI*Math.pow(radious, 2);
 		
-		this.posX =  ThreadLocalRandom.current().nextInt(0, PlayGround.LENGHT + 1);
+		this.posX =  ThreadLocalRandom.current().nextInt(0, Table.ANCHO_TABLERO + 1);
 		
-		this.posY = ThreadLocalRandom.current().nextInt(0, PlayGround.WIDTH + 1);
+		this.posY = ThreadLocalRandom.current().nextInt(0, Table.LARGO_TABLERO + 1);
 		
 		this.color = new Color((int)(Math.random() * 0x1000000));
 	}
