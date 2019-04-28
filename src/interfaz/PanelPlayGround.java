@@ -1,15 +1,19 @@
 package interfaz;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.font.TextAttribute;
 import java.io.IOException;
+import java.text.AttributedString;
 import java.util.ArrayList;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import Mundo.Ball;
@@ -21,9 +25,12 @@ import hilos.HiloMovimientoMouse;
 public class PanelPlayGround extends JPanel implements   MouseMotionListener{
 	
 	private PrincipalFrame principal;
-	
+	private boolean mostrarMensaje;
 	public PanelPlayGround(PrincipalFrame p) {
 		principal= p;
+		mostrarMensaje= false;
+	}
+	public void iniciar() {
 	    hilo= new HiloMovimientoMouse(principal, this, a.x, a.y);
 		hilo.start();
 		addMouseMotionListener(this);
@@ -39,6 +46,13 @@ public class PanelPlayGround extends JPanel implements   MouseMotionListener{
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		if( mostrarMensaje) {
+            AttributedString text = new AttributedString("Esperando otro jugador");
+            text.addAttribute(TextAttribute.FONT, new Font("Arial", Font.BOLD, 24), 0, "Esperando otro jugador".length());
+            text.addAttribute(TextAttribute.FOREGROUND, Color.RED, 0, "Esperando otro jugador".length());
+			
+            g.drawString(text.getIterator(),250,250); 
+		}
 		ArrayList<Food> bolitas = new ArrayList<>();
 		bolitas.addAll(principal.getComida());
 		for (int i = 0; i < bolitas.size(); i++) {
@@ -101,5 +115,11 @@ public class PanelPlayGround extends JPanel implements   MouseMotionListener{
 		//principal.interaccion(x,y);
 //		System.out.println(arg0.getX());
 //		System.out.println(arg0.getY());
+	}
+	public boolean isMostrarMensaje() {
+		return mostrarMensaje;
+	}
+	public void setMostrarMensaje(boolean mostrarMensaje) {
+		this.mostrarMensaje = mostrarMensaje;
 	}
 }

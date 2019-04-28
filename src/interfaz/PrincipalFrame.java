@@ -19,6 +19,8 @@ import conexion.*;
 @SuppressWarnings("serial")
 public class PrincipalFrame extends JFrame {
 
+	
+
 	private Table mundo;
 	private PanelPlayGround miPanelPlay;
 	private JPanel panelAux;
@@ -60,16 +62,46 @@ public class PrincipalFrame extends JFrame {
 	}
 
 	public void cambiarAJuego(String nombre) {
+		mundo.conectarAServidor();
+		new Timer().schedule(new TimerTask() {
+			@Override
+			public void run() {
+				if (mundo.getConected().equals(Table.WAITING)) {
+					playerWaiting();
+				} else if(mundo.getConected().equals(Table.ENABLE)) {
+					iniciaJuego(nombre);
+					iniciarVerificarComer();
+				}
+				else if(mundo.getConected().equals(Table.DISABLE)){
+					iniciaJuego(nombre);
+				}
+			}
+		}, 500);
+	}
+	private HiloVerificarComer nuevo;
+	private void iniciarVerificarComer() {
+		nuevo = new HiloVerificarComer(this);
+		nuevo.start();
+		pack();
+	}
+	private void iniciaJuego(String nombre) {
 		panelAux.remove(0);
 		miPanelPlay = new PanelPlayGround(this);
 		miPanelPlay.setFocusable(true);
+		miPanelPlay.iniciar();
+		
 		mundo.setNombreJugador(nombre);
-		mundo.conectarAServidor();
 		panelAux.add(miPanelPlay, BorderLayout.CENTER);
 		setPreferredSize(new Dimension(600, 600));
-		HiloVerificarComer nuevo = new HiloVerificarComer(this);
-		nuevo.start();
-		pack();
+
+	}
+	public Cronometro cc;
+	private void playerWaiting() {
+		JFrame aux= new JFrame();
+		cc= new Cronometro(this);
+		aux.add(cc);
+		aux.pack();
+		aux.show();
 	}
 
 	public ArrayList<Food> getComida() {
@@ -79,9 +111,13 @@ public class PrincipalFrame extends JFrame {
 	public Player getPrincipal() {
 		return mundo.getJugador();
 	}
+	public Table getMundo() {
+		return mundo;
+	}
 
 	public void interaccion(int x, int y) {
-		if (mundo.getConected()) {
+		if (mundo.getConected().equals(Table.ENABLE)) {
+			miPanelPlay.setMostrarMensaje(false);
 			if (getPrincipal().getAlive()) {
 				mundo.Movimiento(x, y);
 				miPanelPlay.revalidate();
@@ -98,6 +134,12 @@ public class PrincipalFrame extends JFrame {
 				pack();
 			}
 		}
+		else if(mundo.getConected().equals(Table.DISABLE)) {
+			miPanelPlay.setMostrarMensaje(true);
+			if( nuevo==null) {
+				iniciarVerificarComer();
+			}
+		}
 	}
 
 	public void verificarComer() {
@@ -111,7 +153,7 @@ public class PrincipalFrame extends JFrame {
 			}
 			JOptionPane.showMessageDialog(this, mensaje, "Ganadores", JOptionPane.INFORMATION_MESSAGE);
 		}
-		if (getPrincipal().getAlive() && mundo.getConected()) {
+		if (getPrincipal().getAlive() && mundo.getConected().equals(Table.ENABLE)) {
 			mundo.toco();
 			mundo.CollisionPlayers();
 			miPanelPlay.revalidate();
@@ -161,5 +203,11 @@ public class PrincipalFrame extends JFrame {
 		JOptionPane.showMessageDialog(this, "Contrase�a o usuario incorrecto, favor registrarse o correguir los campos",
 				"Login", JOptionPane.INFORMATION_MESSAGE);
 	}
+
+	public void cambiarAStreaming() {
+		//falta
+		
+	}
+	
 
 }

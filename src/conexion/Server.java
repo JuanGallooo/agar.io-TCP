@@ -24,6 +24,8 @@ import hilos.HiloServidorSSL;
 
 
 public class Server {
+	
+	
 	public static ArrayList<HiloEscuchaJugador> ar= new ArrayList<HiloEscuchaJugador>();
     /**
      * Property that represents the numbers of client that are conected.
@@ -45,6 +47,7 @@ public class Server {
     @SuppressWarnings("resource")
 	public static void main(String[] args) throws IOException  
     {
+    	players= new ArrayList<Player>();
     	reiniciar= false;
     	Server server= new Server();
     	Timer timer= new Timer();
@@ -81,22 +84,32 @@ public class Server {
 		
         System.out.println("Start to wait for the clients"); 
 		
-        
+        HiloEscuchaJugador espera=null;
         while (true)  
         { 
             s = ss.accept(); 
             System.out.println("New client request received : " + s); 
             DataOutputStream dos = new DataOutputStream(s.getOutputStream()); 
             DataInputStream dis = new DataInputStream(s.getInputStream()); 
-            if(i<=5) {            	
-            	System.out.println("Creating a new handler for this player..."); 
-            	HiloEscuchaJugador mtch = new HiloEscuchaJugador(s,"Player " + i, dis, dos); 
-            	Thread c = new Thread(mtch); 
-            	System.out.println("Adding this client to active player list"); 
-            	ar.add(mtch); 
-            	c.start();
-            	broadCastingComida();
+            if(i<5) {   
+            	if( i==0) {
+            		dos.writeUTF("--wait");
+            	}
+            	if(i==1) {
+            		ar.get(0).dos.writeUTF("--newPlayer");
+            	}
+        		System.out.println("Creating a new handler for this player..."); 
+        		HiloEscuchaJugador mtch = new HiloEscuchaJugador(s,"Player " + i, dis, dos); 
+        		Thread c = new Thread(mtch); 
+        		System.out.println("Adding this client to active player list"); 
+        		ar.add(mtch); 
+        		c.start();
+        		broadCastingComida();
+
             	i++; 
+            }
+            else {
+            	dos.writeUTF("--disconnect");
             }
         }
     }

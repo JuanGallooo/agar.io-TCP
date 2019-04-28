@@ -48,10 +48,13 @@ public class Table implements Serializable{
 	 * This parameter represents the player in the table
 	 */
 	private Player jugador;
+	public static String ENABLE="ENABLE";
+	public static String DISABLE="DISABLE";
+	public static String WAITING="WAITING";
 	/**
 	 * This atribute represents if the client is conected to the server
 	 */
-	private Boolean conected;
+	private String conected;
 	/**
 	 * This parameter of type array represents the players that are in the table except the principal player, this is use to see the collisions 
 	 */
@@ -90,7 +93,7 @@ public class Table implements Serializable{
     /**
      * This atribute indicates if the client is avaible to login in the server
      */
-    private String inicia;
+    private String Estado;
     
    // private boolean iniciaLogin;
     
@@ -99,8 +102,8 @@ public class Table implements Serializable{
 	 */
 	public Table() {
 		//iniciaLogin= true;
-		inicia= null;
-		conected= false;
+		Estado= null;
+		conected=Table.DISABLE;
 		comida= new ArrayList<>();
 		otrosJugadores= new ArrayList<>();
 
@@ -114,10 +117,11 @@ public class Table implements Serializable{
 			s = new Socket(ip, ServerPort);
 			dis = new DataInputStream(s.getInputStream());
 			dos = new DataOutputStream(s.getOutputStream());
+			conected= Table.ENABLE;
+			
 			HiloActualizarJugadores nuevo= new HiloActualizarJugadores(this);
             actualizar = new Thread(nuevo); 
             actualizar.start(); 
-            conected= true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -465,17 +469,17 @@ public class Table implements Serializable{
 		}
 	}
 	
-	public Boolean getConected() {
+	public String getConected() {
 		return conected;
 	}
-	public void setConected(Boolean conected) {
+	public void setConected(String conected) {
 		this.conected = conected;
 	}
 	public String isInicia() {
-		return inicia;
+		return Estado;
 	}
 	public void setInicia(String inicia) {
-		this.inicia = inicia;
+		this.Estado = inicia;
 	}
 	public void verificarSesion(String text, String contrasena,boolean ini) {
 		boolean crear=ini;
@@ -500,5 +504,14 @@ public class Table implements Serializable{
 	}
 	public void setSslsocket(SSLSocket sslsocket) {
 		this.sslsocket = sslsocket;
+	}
+	public void salaLlena() {
+		setConected(Table.WAITING);
+	}
+	public void esperaUnJugador() {
+		setConected(Table.DISABLE);
+	}
+	public void empiezaJuego() {
+		setConected(Table.ENABLE);
 	}
 }

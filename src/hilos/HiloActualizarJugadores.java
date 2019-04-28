@@ -47,17 +47,28 @@ public class HiloActualizarJugadores implements Runnable{
 				try {
 					if(!corres.s.isClosed()) {
 					String msg = dos.readUTF();
+					
 					StringTokenizer st = new StringTokenizer(msg, "#"); 
 					String tipo= st.nextToken();
 					if(tipo.equals("&")) {
+						System.out.println(msg);
 						Player player= corres.actualizarJugador(msg);
 						if(player !=null) {
-							Server.players.add(player);
+							//Server.players.add(player);
 						}
 						
 					}
 					else if( tipo.equals("@")) {
 						corres.actualizarComida(msg);
+					}
+					else if( tipo.equals("--disconnect")) {
+						corres.salaLlena();
+					}
+					else if( tipo.equals("--wait")) {
+						corres.esperaUnJugador();
+					}
+					else if(tipo.equals("--newPlayer")) {
+						corres.empiezaJuego();
 					}
 					}
 					Thread.sleep(10*5);
