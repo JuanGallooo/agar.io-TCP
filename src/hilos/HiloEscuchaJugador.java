@@ -70,9 +70,15 @@ public class HiloEscuchaJugador implements Runnable{
                         	if(!mc.equals(this)) {
                         		mc.dos.writeUTF(player); 
                         	}
-                        }                        
+                        }                 
+                        
                         String name= st.nextToken();
                         boolean alive= Boolean.parseBoolean(st.nextToken());
+                        st.nextToken();
+                        st.nextToken();
+                        int mass= Integer.parseInt(st.nextToken());
+                        
+                        Server.actualizarJugador(name,mass);
                         if(alive== false) {
                         	this.isloggedin= false;
                         	this.s.close();
@@ -112,6 +118,14 @@ public class HiloEscuchaJugador implements Runnable{
      */
 	public DataOutputStream getDos() {
 		return dos;
+	}
+	public void disconect() {
+		try {
+	    	this.isloggedin= false;
+	    	this.s.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	} 
 	
 }

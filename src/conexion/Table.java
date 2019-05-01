@@ -32,6 +32,11 @@ public class Table implements Serializable{
 	 * This parameter represents the long of the table of the player but it is constant 400
 	 */
 	public static int LARGO_TABLERO=400;
+	public static String ENABLE="ENABLE";
+	public static String DISABLE="DISABLE";
+	public static String WAITING="WAITING";
+	public static String WINNER="WINNER";
+	
 	/**
 	 * This parameter represents the width of the table of the player 
 	 */
@@ -48,9 +53,7 @@ public class Table implements Serializable{
 	 * This parameter represents the player in the table
 	 */
 	private Player jugador;
-	public static String ENABLE="ENABLE";
-	public static String DISABLE="DISABLE";
-	public static String WAITING="WAITING";
+
 	/**
 	 * This atribute represents if the client is conected to the server
 	 */
@@ -95,8 +98,8 @@ public class Table implements Serializable{
      */
     private String Estado;
     
-   // private boolean iniciaLogin;
-    
+    private String Ganador;
+
 	/**
 	 * The constructor of the class Table
 	 */
@@ -513,5 +516,15 @@ public class Table implements Serializable{
 	}
 	public void empiezaJuego() {
 		setConected(Table.ENABLE);
+	}
+	public void cambiaAGanador(String ganador) {
+		setConected(Table.WINNER);
+		setGanador(ganador);
+	}
+	public String getGanador() {
+		return Ganador;
+	}
+	public void setGanador(String ganador) {
+		Ganador = ganador;
 	}
 }

@@ -140,19 +140,22 @@ public class PrincipalFrame extends JFrame {
 				iniciarVerificarComer();
 			}
 		}
+		else if(mundo.getConected().equals(Table.WINNER)) {
+			JOptionPane.showMessageDialog(this, "El ganador del juego ha sido el jugador :"+ mundo.getGanador()+" puntos en total acumulados.", "Ganadores", JOptionPane.INFORMATION_MESSAGE);
+			
+			mundo = new Table();
+			miPanelPlay.disconnect();
+			panelAux.remove(0);
+
+			miPanelIngreso = new PanelIngreso(this);
+			panelAux.add(miPanelIngreso, BorderLayout.CENTER);
+
+			
+			pack();
+		}
 	}
 
 	public void verificarComer() {
-		if (Server.reiniciar == true) {
-			Player[] ganadores = Server.Ganadores();
-			String mensaje = "";
-			for (int i = 0; i < 2; i++) {
-				if (ganadores[i] != null) {
-					mensaje += (i + 1) + "Lugar: " + ganadores[i].getName() + "\n";
-				}
-			}
-			JOptionPane.showMessageDialog(this, mensaje, "Ganadores", JOptionPane.INFORMATION_MESSAGE);
-		}
 		if (getPrincipal().getAlive() && mundo.getConected().equals(Table.ENABLE)) {
 			mundo.toco();
 			mundo.CollisionPlayers();

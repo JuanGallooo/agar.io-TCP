@@ -21,6 +21,7 @@ import Mundo.Food;
 import Mundo.Player;
 import hilos.HiloEscuchaJugador;
 import hilos.HiloServidorSSL;
+import javafx.util.Pair;
 
 
 public class Server {
@@ -34,11 +35,13 @@ public class Server {
     /**
      * The server has the arrayList of Food that represents the food that are in the table of every playe.
      */
-    public static ArrayList<Player> players;
     
-    public static boolean reiniciar;
+    
     
     public static ArrayList<Food> comida;
+    
+    public static ArrayList<Pair<String, Integer>> players;
+    
     /**
      * Main of the class
      * @param args
@@ -47,44 +50,18 @@ public class Server {
     @SuppressWarnings("resource")
 	public static void main(String[] args) throws IOException  
     {
-    	players= new ArrayList<Player>();
-    	reiniciar= false;
-    	Server server= new Server();
-    	Timer timer= new Timer();
-    	
-    	TimerTask tarea= new TimerTask() {
-			
-			@Override
-			public void run() {
-				reiniciar=true;
-				reiniciarJuego();				
-			}
-		};
-		
-		timer.scheduleAtFixedRate(tarea, 0, 15000);
-    	
         ServerSocket ss = new ServerSocket(8000); 
         Socket s; 
-        
 		comida= new ArrayList<>();
 		for (int i = 0; i < 100; i++) {
 			Food nueva= new Food();
 			comida.add(nueva);
 		}
-        
 		System.out.println("Start the server of the SSL conection"); 
-		
-		
 		HiloServidorSSL hiloSSL= new HiloServidorSSL();
-		
         Thread t = new Thread(hiloSSL); 
-        
-
         t.start(); 
-		
         System.out.println("Start to wait for the clients"); 
-		
-        HiloEscuchaJugador espera=null;
         while (true)  
         { 
             s = ss.accept(); 
@@ -97,6 +74,13 @@ public class Server {
             	}
             	if(i==1) {
             		ar.get(0).dos.writeUTF("--newPlayer");
+            		
+            		new Timer().schedule(new TimerTask() {
+            			@Override
+            			public void run() {
+            				reportarGanadores();
+            			}
+            		}, 2000);
             	}
         		System.out.println("Creating a new handler for this player..."); 
         		HiloEscuchaJugador mtch = new HiloEscuchaJugador(s,"Player " + i, dis, dos); 
@@ -105,7 +89,6 @@ public class Server {
         		ar.add(mtch); 
         		c.start();
         		broadCastingComida();
-
             	i++; 
             }
             else {
@@ -114,7 +97,36 @@ public class Server {
         }
     }
     
-    /**
+    protected static void reportarGanadores() {
+    	try {
+    		for (int i = 0; i < ar.size(); i++) {
+    			ar.get(i).getDos().writeUTF("--ganador#"+getGanador());
+    			ar.get(i).disconect();
+    		}
+    		ar.removeAll(ar);
+    		comida= new ArrayList<>();
+    		for (int i = 0; i < 100; i++) {
+    			Food nueva= new Food();
+    			comida.add(nueva);
+    		}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static String getGanador() {
+		String retorno="";
+		int mayor=Integer.MIN_VALUE;
+		for (int i = 0; i <players.size(); i++) {
+			if(players.get(i).getValue()>mayor) {
+				retorno= players.get(i).getKey()+" "+players.get(i).getValue(); 
+				mayor= players.get(i).getValue();
+			}
+		}
+		return retorno;
+	}
+
+	/**
      * This method represents the sending of the information of the food in the table
      */
 	public static void broadCastingComida() {
@@ -142,9 +154,7 @@ public class Server {
 		return jugadores;
 	}
 	
-	public static void reiniciarJuego() {
-		
-	}
+
 
 	public static boolean comprobarContra(String p) {
 		String[] split= p.split(" ");
@@ -180,6 +190,15 @@ public class Server {
 			e.printStackTrace();
 		}
 		return retorno;
+	}
+
+	public static void actualizarJugador(String name, int mass) {
+		for (int i = 0; i < players.size(); i++) {
+			if(players.get(i).getKey().equals(name)&& players.get(i).getValue()!=mass) {
+				players.set(i, new Pair<String, Integer>(name, mass));
+				break;
+			}
+		}
 	}
 	
 	 
