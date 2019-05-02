@@ -42,7 +42,6 @@ public class HiloServidorSSL implements Runnable{
 			while(true){                
 	            SSLSocket sslsocket = (SSLSocket) s.accept();
 	            System.out.println("New Client accepted");
-	            
 	            HiloEscuchaSSL t = new HiloEscuchaSSL(sslsocket);
 	            Thread o= new Thread(t);
 	            o.start();      

@@ -51,7 +51,7 @@ public class HiloActualizarJugadores implements Runnable{
 					StringTokenizer st = new StringTokenizer(msg, "#"); 
 					String tipo= st.nextToken();
 					if(tipo.equals("&")) {
-						System.out.println(msg);
+
 						Player player= corres.actualizarJugador(msg);
 						if(player !=null) {
 							//Server.players.add(player);

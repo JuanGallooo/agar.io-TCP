@@ -57,6 +57,7 @@ public class Server {
 			Food nueva= new Food();
 			comida.add(nueva);
 		}
+		players= new ArrayList<Pair<String, Integer>>();
 		System.out.println("Start the server of the SSL conection"); 
 		HiloServidorSSL hiloSSL= new HiloServidorSSL();
         Thread t = new Thread(hiloSSL); 
@@ -79,8 +80,9 @@ public class Server {
             			@Override
             			public void run() {
             				reportarGanadores();
+            				System.out.println(true);
             			}
-            		}, 2000);
+            		}, 1000000);
             	}
         		System.out.println("Creating a new handler for this player..."); 
         		HiloEscuchaJugador mtch = new HiloEscuchaJugador(s,"Player " + i, dis, dos); 

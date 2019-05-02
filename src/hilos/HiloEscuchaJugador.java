@@ -13,6 +13,7 @@ import java.util.StringTokenizer;
 import Mundo.Food;
 import Mundo.Player;
 import conexion.Server;
+import javafx.util.Pair;
 /**
  * Thread that is use to refresh the information of the players and the table referenced to the food, this is communicated whit the server. 
  *
@@ -78,7 +79,7 @@ public class HiloEscuchaJugador implements Runnable{
                         st.nextToken();
                         int mass= Integer.parseInt(st.nextToken());
                         
-                        Server.actualizarJugador(name,mass);
+                        actualizarJugador(name,mass);
                         if(alive== false) {
                         	this.isloggedin= false;
                         	this.s.close();
@@ -107,7 +108,7 @@ public class HiloEscuchaJugador implements Runnable{
                 e.printStackTrace(); 
             } 
         	}else {
-        		System.out.println("el puto amo");
+        		//System.out.println("el puto amo");
         	}
         }
     }
@@ -127,5 +128,13 @@ public class HiloEscuchaJugador implements Runnable{
 			e.printStackTrace();
 		}
 	} 
+	public static void actualizarJugador(String name, int mass) {
+		for (int i = 0; i < Server.players.size(); i++) {
+			if(Server.players.get(i).getKey().equals(name)&& Server.players.get(i).getValue()!=mass) {
+				Server.players.set(i, new Pair<String, Integer>(name, mass));
+				break;
+			}
+		}
+	}
 	
 }

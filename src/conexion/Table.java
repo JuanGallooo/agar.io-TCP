@@ -518,8 +518,19 @@ public class Table implements Serializable{
 		setConected(Table.ENABLE);
 	}
 	public void cambiaAGanador(String ganador) {
-		setConected(Table.WINNER);
+		jugador.playerDies();
+		mandarInfo();
+		try {
+			if(s!=null) {
+				s.close();
+				s=null;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		setGanador(ganador);
+		setConected(Table.WINNER);
+
 	}
 	public String getGanador() {
 		return Ganador;
