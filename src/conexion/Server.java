@@ -120,12 +120,16 @@ public class Server {
     		for (int i = 0; i < ar.size(); i++) {
     			ar.get(i).getDos().writeUTF("--ganador#"+envio);
     		}
+    		for (int i = 0; i < ar.size(); i++) {
+				ar.get(i).disconect();
+			}
     		ar= new ArrayList<HiloEscuchaJugador>();
     		comida= new ArrayList<>();
     		for (int i = 0; i < 100; i++) {
     			Food nueva= new Food();
     			comida.add(nueva);
     		}
+    		i=0;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -52,12 +52,8 @@ public class HiloEscuchaJugador implements Runnable{
      */
     public void run() { 
         while (true)  
-        { 
-        	
-        	
-        	if(isloggedin!= false) {
-        		
-        	
+        {        	
+           	if(isloggedin!= false && !s.isClosed()) {  		       	
             try
             { 
             	    String player=dis.readUTF();
@@ -124,7 +120,6 @@ public class HiloEscuchaJugador implements Runnable{
 		try {
 	    	this.isloggedin= false;
 	    	this.s.close();
-        	Server.ar.remove(this);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

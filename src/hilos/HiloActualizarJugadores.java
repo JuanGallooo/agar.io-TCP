@@ -76,8 +76,8 @@ public class HiloActualizarJugadores implements Runnable{
 					Thread.sleep(10*5);
 					}
 					} catch (Exception e) { 
-					e.printStackTrace(); 
-				} 				
+					break;
+				    } 				
 			}
 		}
 	}

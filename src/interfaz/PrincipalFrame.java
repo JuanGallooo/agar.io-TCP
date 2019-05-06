@@ -142,7 +142,7 @@ public class PrincipalFrame extends JFrame {
 		}
 		else if(mundo.getConected().equals(Table.WINNER)) {
 			JOptionPane.showMessageDialog(this, "El ganador del juego ha sido el jugador :"+ mundo.getGanador()+" puntos en total acumulados.", "Ganadores", JOptionPane.INFORMATION_MESSAGE);
-			System.out.println("Entro a ganador porque no cambias");
+			
 			mundo = new Table();
 			miPanelPlay.disconnect();
 			panelAux.remove(0);
