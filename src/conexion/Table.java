@@ -8,6 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.InetAddress;
+import java.net.MulticastSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
@@ -15,11 +16,11 @@ import java.util.StringTokenizer;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 import Mundo.Food;
 import Mundo.Player;
 import hilos.HiloActualizarJugadores;
+import hilos.HiloAudioUDPClient;
 import hilos.HiloEscuchaRespuestaSSL;
 
 @SuppressWarnings("serial")
@@ -32,11 +33,16 @@ public class Table implements Serializable{
 	 * This parameter represents the long of the table of the player but it is constant 400
 	 */
 	public static int LARGO_TABLERO=400;
+	public static final int PORT_AUDIO = 1024;
+	public static final String DIRECCION_MULTICAST = "localhost";
+	
+	
 	public static String ENABLE="ENABLE";
 	public static String DISABLE="DISABLE";
 	public static String WAITING="WAITING";
 	public static String WINNER="WINNER";
-	
+	private MulticastSocket dtSocket;
+	private HiloAudioUDPClient hiloAudioCliente;
 	/**
 	 * This parameter represents the width of the table of the player 
 	 */
@@ -113,6 +119,11 @@ public class Table implements Serializable{
 		jugador= new Player("Nothing");
 		
 		System.setProperty("javax.net.ssl.trustStore", "./docs/server.jks");
+		
+		hiloAudioCliente = new HiloAudioUDPClient(this.DIRECCION_MULTICAST,this.PORT_AUDIO);
+	    hiloAudioCliente.start();
+		
+		
 	}
 	public void conectarAServidor() {
 		try {
@@ -128,6 +139,13 @@ public class Table implements Serializable{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	public MulticastSocket getDtSocket() {
+		return dtSocket;
+	}
+
+	public void setDtSocket(MulticastSocket dtSocket) {
+		this.dtSocket = dtSocket;
 	}
 	public void conectarSSL() {
 		try {
@@ -531,6 +549,7 @@ public class Table implements Serializable{
 		setGanador(ganador);
 		setConected(Table.WINNER);
 	}
+	
 	public String getGanador() {
 		return Ganador;
 	}

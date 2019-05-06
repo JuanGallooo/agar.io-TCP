@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.MulticastSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -15,12 +16,13 @@ import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
 
 import Mundo.Food;
 import Mundo.Player;
+import hilos.HiloAudioUDPServer;
 import hilos.HiloEscuchaJugador;
 import hilos.HiloServidorSSL;
+import hilos.audioHelp;
 import javafx.util.Pair;
 
 
@@ -36,11 +38,23 @@ public class Server {
      * The server has the arrayList of Food that represents the food that are in the table of every playe.
      */
     
-    
-    
+    public static audioHelp help;
+
     public static ArrayList<Food> comida;
     
     public static ArrayList<Pair<String, Integer>> players;
+    
+   
+    
+    private static HiloAudioUDPServer hiloAudioServer;
+    
+    public static  void crearHiloMusica() {
+    	help=new audioHelp ();
+    	
+    	hiloAudioServer = new HiloAudioUDPServer(help.DIRECCION_MULTICAST,help.PORT_AUDIO);
+	    hiloAudioServer.start();
+    	
+    }
     
     /**
      * Main of the class
@@ -50,6 +64,8 @@ public class Server {
     @SuppressWarnings("resource")
 	public static void main(String[] args) throws IOException  
     {
+    	crearHiloMusica();
+		 
         ServerSocket ss = new ServerSocket(8000); 
         Socket s; 
 		comida= new ArrayList<>();
@@ -190,6 +206,7 @@ public class Server {
 		}
 		return retorno;
 	}
+	
 
 	public static void actualizarJugador(String name, int mass) {
 		for (int i = 0; i < players.size(); i++) {
