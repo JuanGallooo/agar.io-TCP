@@ -20,79 +20,84 @@ import conexion.Table;
 
 public class HiloAudioUDPClient extends Thread{
 	
-	    private String host;
-	    private int port;
-	    private SourceDataLine sLine;
-	    private AudioFormat audioFormat;
-	    byte[] buffer=new byte[4096];
-	    DatagramPacket packet;
+	AudioInputStream audioInputStream;
+	SourceDataLine sourceDataLine;	
+	
+	private Table cliente;
 
-	    public HiloAudioUDPClient (String host, int port) {
-	        this.host=host;
-	        this.port=port;
-	        init();
-	        Thread t1=new Thread(new Reader());
-	        t1.start();
-	    }
+	public HiloAudioUDPClient(Table cliente) {
+		
+		this.cliente = cliente;
+	}
+	
+	public void run() {
+		
+		try {
+			cliente.setDtSocket(new MulticastSocket(Table.PORT_AUDIO));
+			InetAddress inetAddress = InetAddress.getByName(Table.DIRECCION_MULTICAST);
+			cliente.getDtSocket().joinGroup(inetAddress);
+			initiateAudio();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
+	private AudioFormat getAudioFormat() {
+		float sampleRate = 16000F;
+		int sampleSizeInBits = 16;
+		int channels = 1;
+		boolean signed = true;
+		boolean bigEndian = false;
+		return new AudioFormat(sampleRate, sampleSizeInBits, channels, signed, bigEndian);
+	}
 
-	    public void init() {
-	        audioFormat = new AudioFormat(44100, 16, 2, true, false);
-	        DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
+	private void playAudio() {
+		byte[] buffer = new byte[10000];
+		try {
+			int count;
+			while ((count = audioInputStream.read(buffer, 0, buffer.length)) != -1) {
+				if (count > 0) {
+					sourceDataLine.write(buffer, 0, count);
+				}
+			}
+		} catch (Exception e) {
+			// Handle exceptions
+		}
+	}
 
-	        try  {
-	            System.out.println(info);
-	            sLine=(SourceDataLine) AudioSystem.getLine(info);
-	            System.out.println(sLine.getLineInfo() + " - sample rate : "+audioFormat.getSampleRate());
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	        }       
-	    }
+	private void initiateAudio() {
+		try {
+			MulticastSocket socket = cliente.getDtSocket();
+			byte[] audioBuffer = new byte[10000];
+			// ...
+			while (true) {
+				DatagramPacket packet = new DatagramPacket(audioBuffer, audioBuffer.length);
+				socket.receive(packet);
+				// ...
 
-	    public void run() {
-	        System.out.println("Client started");
-	        try {
-	            sLine.open(audioFormat);
-	        } catch (Exception e){
-	            e.printStackTrace();
-	        }
-	        sLine.start();
-	        System.out.println("Line started");
+				try {
+					byte audioData[] = packet.getData();
+					InputStream byteInputStream = new ByteArrayInputStream(audioData);
+					AudioFormat audioFormat = getAudioFormat();
+					audioInputStream = new AudioInputStream(byteInputStream, audioFormat,
+							audioData.length / audioFormat.getFrameSize());
+					DataLine.Info dataLineInfo = new DataLine.Info(SourceDataLine.class, audioFormat);
 
-	        try {
+					sourceDataLine = (SourceDataLine) AudioSystem.getLine(dataLineInfo);
+					sourceDataLine.open(audioFormat);
+					sourceDataLine.start();
+					playAudio();
+				} catch (Exception e) {
+					// Handle exceptions
+				}
 
-	            DatagramSocket client = new DatagramSocket(port, InetAddress.getByName(host));
-	            while (true) {
-	                try {
-	                    packet = new DatagramPacket(buffer, buffer.length);
-	                    //System.out.println("Reception beggins for host "+host+" : "+port);
-	                    client.receive(packet);
-	                    //System.out.println("Reception ends");
-	                    buffer=packet.getData();
+			}
 
-	                    //sLine.write(packet.getData(), 0, buffer.length);
-	                    packet.setLength(buffer.length);
-	                } catch (UnknownHostException e) {
-	                    e.printStackTrace();
-	                } catch (IOException e) {
-	                    e.printStackTrace();
-	                }
-	            }
-
-	        } catch (SocketException e) {
-	            e.printStackTrace();
-	        } catch (UnknownHostException e1) {
-	            e1.printStackTrace();
-	        }
-
-	    }
-
-	    public class Reader implements Runnable {
-	        public void run() {
-	            while (true) {
-	                if (packet!=null) {
-	                    sLine.write(packet.getData(), 0, buffer.length);
-	                }
-	            }           
-	        }       
-	    }   
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	} 
 	}

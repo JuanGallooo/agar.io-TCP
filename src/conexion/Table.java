@@ -35,8 +35,15 @@ public class Table implements Serializable{
 	 * This parameter represents the long of the table of the player but it is constant 400
 	 */
 	public static int LARGO_TABLERO=400;
+<<<<<<< HEAD
 	public static final int PORT_AUDIO = 1024;
 	public static final String DIRECCION_MULTICAST = "localhost";
+=======
+	public static final int PORT_AUDIO = 9999;
+	public static final String DIRECCION_MULTICAST = "224.0.0.1";
+	
+	
+>>>>>>> 0cc851e2dea49842faea6cd93eb81d50809a8a45
 	public static String ENABLE="ENABLE";
 	public static String DISABLE="DISABLE";
 	public static String WAITING="WAITING";
@@ -132,7 +139,7 @@ public class Table implements Serializable{
 		
 		System.setProperty("javax.net.ssl.trustStore", "./docs/server.jks");
 		
-		hiloAudioCliente = new HiloAudioUDPClient(this.DIRECCION_MULTICAST,this.PORT_AUDIO);
+		hiloAudioCliente = new HiloAudioUDPClient(this);
 	    hiloAudioCliente.start();
 		
 		
