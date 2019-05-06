@@ -33,8 +33,8 @@ public class Table implements Serializable{
 	 * This parameter represents the long of the table of the player but it is constant 400
 	 */
 	public static int LARGO_TABLERO=400;
-	public static final int PORT_AUDIO = 1024;
-	public static final String DIRECCION_MULTICAST = "localhost";
+	public static final int PORT_AUDIO = 9999;
+	public static final String DIRECCION_MULTICAST = "224.0.0.1";
 	
 	
 	public static String ENABLE="ENABLE";

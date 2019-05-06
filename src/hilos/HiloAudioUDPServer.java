@@ -64,6 +64,7 @@ public class HiloAudioUDPServer extends Thread {
 
 	    public void run() {
 	        try {
+	        	
 	            byte bytes[] =  new byte[4096];
 	            byte bytes2[] =  new byte[1024];
 	            int bytesRead=0;
@@ -80,14 +81,15 @@ public class HiloAudioUDPServer extends Thread {
 
 	            while ((bytesRead=audioInputStream.read(bytes, 0, bytes.length))!= -1) {
 	                //getSignalLevel(bytes);
-
+	            	
 	                try {                   
-	                    //startTime=System.nanoTime();
+	                 //   startTime=System.nanoTime();
 	                    packet = new DatagramPacket(bytes, bytes.length, InetAddress.getByName(host), port);
 	                    packet.setData(bytes);
 	                    server.send(packet);                    
-	                    packet.setLength(bytes.length);                 
-	                    //endTime=System.nanoTime();
+	                    packet.setLength(bytes.length);  
+	                    
+	                   // endTime=System.nanoTime();
 	                    //System.out.println(endTime-startTime);
 	                    Thread.sleep(sleepTimeMillis,sleepTimeNanos);                   
 	                } catch (IOException e) {

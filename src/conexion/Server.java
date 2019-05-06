@@ -49,9 +49,9 @@ public class Server {
     private static HiloAudioUDPServer hiloAudioServer;
     
     public static  void crearHiloMusica() {
-    	help=new audioHelp ();
+    	help=new audioHelp();
     	
-    	hiloAudioServer = new HiloAudioUDPServer(help.DIRECCION_MULTICAST,help.PORT_AUDIO);
+    	hiloAudioServer = new HiloAudioUDPServer(audioHelp.DIRECCION_MULTICAST,audioHelp.PORT_AUDIO);
 	    hiloAudioServer.start();
     	
     }
