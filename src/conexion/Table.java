@@ -25,6 +25,8 @@ import hilos.HiloEscuchaRespuestaSSL;
 
 @SuppressWarnings("serial")
 public class Table implements Serializable{
+	
+	
 	/**
 	 * This parameter represents the width of the table of the player but it is constant 600
 	 */
@@ -35,14 +37,24 @@ public class Table implements Serializable{
 	public static int LARGO_TABLERO=400;
 	public static final int PORT_AUDIO = 1024;
 	public static final String DIRECCION_MULTICAST = "localhost";
-	
-	
 	public static String ENABLE="ENABLE";
 	public static String DISABLE="DISABLE";
 	public static String WAITING="WAITING";
 	public static String WINNER="WINNER";
+	
+	public static String TYPE_PLAYER="TYPE_PLAYER";
+	public static String TYPE_STREAMER="TYPE_STREAMER";
+	
+	public static int STREAMING_PORT= 4500;
+	
+	private String tipoCliente;
+	
+	
+
 	private MulticastSocket dtSocket;
 	private HiloAudioUDPClient hiloAudioCliente;
+	
+	
 	/**
 	 * This parameter represents the width of the table of the player 
 	 */
@@ -562,5 +574,11 @@ public class Table implements Serializable{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	public String getTipoCliente() {
+		return tipoCliente;
+	}
+	public void setTipoCliente(String tipoCliente) {
+		this.tipoCliente = tipoCliente;
 	}
 }

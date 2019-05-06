@@ -8,6 +8,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -220,6 +223,18 @@ public class Server {
 			}
 		}
 	}
+	private static DatagramSocket socket;
 	
+	public static final String direccionMulticast= "230.0.0.0";
+	
+	public void mandarInfoStreamers() {
+	      InetAddress group = InetAddress.getByName(Server.direccionMulticast);
+	      byte[] msg = message.getBytes();
+	      DatagramPacket packet = new DatagramPacket(msg, msg.length,
+	         group,Table.STREAMING_PORT);
+	      socket.send(packet);
+	      //socket.close();
+		
+	}
 	 
 }
