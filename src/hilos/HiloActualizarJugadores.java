@@ -70,12 +70,11 @@ public class HiloActualizarJugadores implements Runnable{
 					else if(tipo.equals("--newPlayer")) {
 						corres.empiezaJuego();
 					}
-					else if(tipo.equals("----ganador")) {
+					else if(tipo.equals("--ganador")) {
 						corres.cambiaAGanador(st.nextToken());
 					}
 					Thread.sleep(10*5);
 					}
-					
 					} catch (Exception e) { 
 					e.printStackTrace(); 
 				} 				

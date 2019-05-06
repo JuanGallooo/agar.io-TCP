@@ -519,7 +519,7 @@ public class Table implements Serializable{
 	}
 	public void cambiaAGanador(String ganador) {
 		jugador.playerDies();
-		mandarInfo();
+		//mandarInfo();
 		try {
 			if(s!=null) {
 				s.close();
@@ -530,12 +530,18 @@ public class Table implements Serializable{
 		}
 		setGanador(ganador);
 		setConected(Table.WINNER);
-
 	}
 	public String getGanador() {
 		return Ganador;
 	}
 	public void setGanador(String ganador) {
 		Ganador = ganador;
+	}
+	public void dejarEscucharSSL() {
+		try {
+			salidaSSL.writeObject("--salida");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

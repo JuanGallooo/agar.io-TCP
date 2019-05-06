@@ -75,14 +75,13 @@ public class Server {
             	}
             	if(i==1) {
             		ar.get(0).dos.writeUTF("--newPlayer");
-            		
             		new Timer().schedule(new TimerTask() {
             			@Override
             			public void run() {
             				reportarGanadores();
             				System.out.println(true);
             			}
-            		}, 1000000);
+            		}, 10000);
             	}
         		System.out.println("Creating a new handler for this player..."); 
         		HiloEscuchaJugador mtch = new HiloEscuchaJugador(s,"Player " + i, dis, dos); 
@@ -101,11 +100,11 @@ public class Server {
     
     protected static void reportarGanadores() {
     	try {
+    		String envio= getGanador();
     		for (int i = 0; i < ar.size(); i++) {
-    			ar.get(i).getDos().writeUTF("--ganador#"+getGanador());
-    			ar.get(i).disconect();
+    			ar.get(i).getDos().writeUTF("--ganador#"+envio);
     		}
-    		ar.removeAll(ar);
+    		ar= new ArrayList<HiloEscuchaJugador>();
     		comida= new ArrayList<>();
     		for (int i = 0; i < 100; i++) {
     			Food nueva= new Food();
@@ -155,8 +154,6 @@ public class Server {
 		Arrays.sort(players.toArray(jugadores), java.util.Collections.reverseOrder());
 		return jugadores;
 	}
-	
-
 
 	public static boolean comprobarContra(String p) {
 		String[] split= p.split(" ");

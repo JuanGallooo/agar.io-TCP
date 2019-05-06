@@ -22,9 +22,13 @@ public class HiloEscuchaRespuestaSSL implements Runnable{
 	public void run() {
 		try {
 		while(sigue) {
-			
 					String s = (String) entradaSSL.readObject();
+					if(s.equals("--salida")) {
+						terminar();
+					}
+					else {
 					tablero.setInicia(s);
+					}
 		}
 		} catch (Exception e) {
 			e.printStackTrace();

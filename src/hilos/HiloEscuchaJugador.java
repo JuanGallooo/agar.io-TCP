@@ -108,7 +108,7 @@ public class HiloEscuchaJugador implements Runnable{
                 e.printStackTrace(); 
             } 
         	}else {
-        		//System.out.println("el puto amo");
+        		break;
         	}
         }
     }
@@ -124,16 +124,21 @@ public class HiloEscuchaJugador implements Runnable{
 		try {
 	    	this.isloggedin= false;
 	    	this.s.close();
+        	Server.ar.remove(this);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	} 
 	public static void actualizarJugador(String name, int mass) {
-		for (int i = 0; i < Server.players.size(); i++) {
+		boolean encontro= false;
+		for (int i = 0; i < Server.players.size()&& !encontro; i++) {
 			if(Server.players.get(i).getKey().equals(name)&& Server.players.get(i).getValue()!=mass) {
 				Server.players.set(i, new Pair<String, Integer>(name, mass));
-				break;
+				encontro= true;
 			}
+		}
+		if( encontro==false) {
+			Server.players.add(new Pair<String, Integer>(name, mass));
 		}
 	}
 	

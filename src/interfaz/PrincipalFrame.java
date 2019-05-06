@@ -142,15 +142,14 @@ public class PrincipalFrame extends JFrame {
 		}
 		else if(mundo.getConected().equals(Table.WINNER)) {
 			JOptionPane.showMessageDialog(this, "El ganador del juego ha sido el jugador :"+ mundo.getGanador()+" puntos en total acumulados.", "Ganadores", JOptionPane.INFORMATION_MESSAGE);
-			
+			System.out.println("Entro a ganador porque no cambias");
 			mundo = new Table();
 			miPanelPlay.disconnect();
 			panelAux.remove(0);
 
 			miPanelIngreso = new PanelIngreso(this);
 			panelAux.add(miPanelIngreso, BorderLayout.CENTER);
-
-			
+		
 			pack();
 		}
 	}
@@ -182,11 +181,12 @@ public class PrincipalFrame extends JFrame {
 			public void run() {
 				if (Boolean.parseBoolean(mundo.isInicia())) {
 					inicioExitoso();
+					mundo.dejarEscucharSSL();
 				} else
 					usuarioIncorrecto();
+				    mundo.dejarEscucharSSL();
 			}
 		}, 500);
-
 	}
 
 	public void registrarUsuario(String text, char[] password) {
