@@ -20,16 +20,16 @@ import conexion.Table;
 
 public class HiloAudioUDPClient extends Thread{
 	
-	    private String host;
-	    private int port;
+	   
 	    private SourceDataLine sLine;
 	    private AudioFormat audioFormat;
 	    byte[] buffer=new byte[4096];
 	    DatagramPacket packet;
+	    private Table cliente;
 
-	    public HiloAudioUDPClient (String host, int port) {
-	        this.host=host;
-	        this.port=port;
+	    public HiloAudioUDPClient (Table cliente) {
+	        
+	        this.cliente=cliente;
 	        init();
 	        Thread t1=new Thread(new Reader());
 	        t1.start();
@@ -59,30 +59,27 @@ public class HiloAudioUDPClient extends Thread{
 	        System.out.println("Line started");
 
 	        try {
+				cliente.setDtSocket(new MulticastSocket(cliente.PORT_AUDIO));
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			while (true) {
+			    try {
+			        packet = new DatagramPacket(buffer, buffer.length);
+			        //System.out.println("Reception beggins for host "+host+" : "+port);
+			        cliente.getDtSocket().receive(packet);
+			        //System.out.println("Reception ends");
+			        buffer=packet.getData();
 
-	            DatagramSocket client = new DatagramSocket(port, InetAddress.getByName(host));
-	            while (true) {
-	                try {
-	                    packet = new DatagramPacket(buffer, buffer.length);
-	                    //System.out.println("Reception beggins for host "+host+" : "+port);
-	                    client.receive(packet);
-	                    //System.out.println("Reception ends");
-	                    buffer=packet.getData();
-
-	                    //sLine.write(packet.getData(), 0, buffer.length);
-	                    packet.setLength(buffer.length);
-	                } catch (UnknownHostException e) {
-	                    e.printStackTrace();
-	                } catch (IOException e) {
-	                    e.printStackTrace();
-	                }
-	            }
-
-	        } catch (SocketException e) {
-	            e.printStackTrace();
-	        } catch (UnknownHostException e1) {
-	            e1.printStackTrace();
-	        }
+			        //sLine.write(packet.getData(), 0, buffer.length);
+			        packet.setLength(buffer.length);
+			    } catch (UnknownHostException e) {
+			        e.printStackTrace();
+			    } catch (IOException e) {
+			        e.printStackTrace();
+			    }
+			}
 
 	    }
 

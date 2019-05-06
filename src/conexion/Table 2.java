@@ -33,6 +33,8 @@ public class Table implements Serializable{
 	 * This parameter represents the long of the table of the player but it is constant 400
 	 */
 	public static int LARGO_TABLERO=400;
+	
+	
 	public static final int PORT_AUDIO = 1024;
 	public static final String DIRECCION_MULTICAST = "localhost";
 	
@@ -120,7 +122,7 @@ public class Table implements Serializable{
 		
 		System.setProperty("javax.net.ssl.trustStore", "./docs/server.jks");
 		
-		hiloAudioCliente = new HiloAudioUDPClient(this);
+		hiloAudioCliente = new HiloAudioUDPClient(this.DIRECCION_MULTICAST,this.PORT_AUDIO);
 	    hiloAudioCliente.start();
 		
 		
@@ -537,7 +539,7 @@ public class Table implements Serializable{
 	}
 	public void cambiaAGanador(String ganador) {
 		jugador.playerDies();
-		//mandarInfo();
+		mandarInfo();
 		try {
 			if(s!=null) {
 				s.close();
@@ -548,6 +550,7 @@ public class Table implements Serializable{
 		}
 		setGanador(ganador);
 		setConected(Table.WINNER);
+
 	}
 	
 	public String getGanador() {
@@ -555,12 +558,5 @@ public class Table implements Serializable{
 	}
 	public void setGanador(String ganador) {
 		Ganador = ganador;
-	}
-	public void dejarEscucharSSL() {
-		try {
-			salidaSSL.writeObject("--salida");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 }
