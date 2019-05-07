@@ -23,7 +23,7 @@ public class HiloAudioUDPServer extends Thread {
 	    private SourceDataLine sLine;
 	    private AudioFormat audioFormat;
 	    private AudioInputStream audioInputStream=null;
-	    private String host="localhost";
+	    private String host=Server.HOST;
 	    private int port=5000;
 	    private DatagramSocket server;
 	    private DatagramPacket packet;

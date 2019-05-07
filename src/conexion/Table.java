@@ -147,7 +147,7 @@ public class Table {
 			hiloAudioCliente = new HiloAudioUDPClient(this);
 			hiloAudioCliente.start();
 			tipoCliente= Table.TYPE_PLAYER;
-			ip= InetAddress.getByName("localhost");
+			ip= InetAddress.getByName(Server.HOST);
 			s = new Socket(ip, ServerPort);
 			dis = new DataInputStream(s.getInputStream());
 			dos = new DataOutputStream(s.getOutputStream());
@@ -179,7 +179,7 @@ public class Table {
 	public void conectarSSL() {
 		try {
 			SSLSocketFactory f = (SSLSocketFactory) SSLSocketFactory.getDefault();
-			sslsocket = (SSLSocket) f.createSocket("localhost", 6500); 
+			sslsocket = (SSLSocket) f.createSocket(Server.HOST, 6500); 
 			sslsocket.startHandshake();
 			System.out.println("Authentication done");
 			

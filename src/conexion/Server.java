@@ -33,12 +33,16 @@ import javafx.util.Pair;
 public class Server {
 	
 	
+	
 	public static ArrayList<HiloEscuchaJugador> ar= new ArrayList<HiloEscuchaJugador>();
     /**
      * Property that represents the numbers of client that are conected.
      */
     static int i = 0;
     static int streamers;
+    
+    
+    public final static String HOST="172.30.188.69";
     /**
      * The server has the arrayList of Food that represents the food that are in the table of every playe.
      */
