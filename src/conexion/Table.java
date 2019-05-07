@@ -49,7 +49,7 @@ public class Table {
 	public static String TYPE_PLAYER="TYPE_PLAYER";
 	public static String TYPE_STREAMER="TYPE_STREAMER";
 	
-	public static int STREAMING_PORT= 4500;
+	public static int STREAMING_PORT= 5000;
 	
 	private String tipoCliente;
 	
@@ -491,12 +491,15 @@ public class Table {
 	 * @param msg the information of new food in the server.
 	 */
 	public void actualizarComida(String msg) {
+		int contador=0;
 		try {
 	          StringTokenizer st = new StringTokenizer(msg, "#"); 
 	          st.nextToken();
 	          int comidaIn= Integer.parseInt(st.nextToken());
 	          comida.removeAll(comida);
+	          
 	          for (int i = 0; i < comidaIn; i++) {
+	        	  contador++;
 	          String color= st.nextToken();
 	          Color c= Color.decode(color);
 	          double x= Double.parseDouble(st.nextToken());
@@ -513,6 +516,7 @@ public class Table {
 	        	  comida.add(nueva);
 			}
 		} catch (Exception e) {
+			System.out.println(contador);
 			e.printStackTrace();
 		}
 	}
@@ -598,8 +602,8 @@ public class Table {
 	}
 	public void actualizarDatosStreaming(String msg) {
 		try {
-			System.out.println("Entre a actualizar");
-			String[] arreglo= msg.split("||");
+			//System.out.println(msg.length());
+			String[] arreglo= msg.split("/");
 			String[] jugadores= arreglo[0].split("--");
 			int jugardoresActu= Integer.parseInt(jugadores[0]);
 			for (int i = 1; i < jugardoresActu; i++) {

@@ -84,7 +84,6 @@ public class PrincipalFrame extends JFrame {
 
 	public void cambiarAStreaming(String string) {
 		mundo.conectarAStreaming();
-		Server.aumentarStreamer();
 		iniciaJuego(string, true);
 		iniciarVerificarComer();
 	}
@@ -204,7 +203,6 @@ public class PrincipalFrame extends JFrame {
 
 	public void registrarUsuario(String text, char[] password) {
 		String contrasena = String.valueOf(password);
-
 		mundo.verificarSesion(text, contrasena, true);
 		inicioExitoso();
 	}
@@ -219,7 +217,4 @@ public class PrincipalFrame extends JFrame {
 		JOptionPane.showMessageDialog(this, "Contrase�a o usuario incorrecto, favor registrarse o correguir los campos",
 				"Login", JOptionPane.INFORMATION_MESSAGE);
 	}
-
-	
-
 }

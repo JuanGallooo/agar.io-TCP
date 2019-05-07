@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.MulticastSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -48,9 +49,7 @@ public class Server {
     public static ArrayList<Pair<String, Integer>> playersForWinner;
     public static ArrayList<Pair<String, String>> playersInfo;
     
-	private static DatagramSocket socketStreaming;
-	
-	public static final String direccionMulticast= "230.0.0.0";
+
 	
 	public static String envioStreamers;	
     
@@ -88,7 +87,7 @@ public class Server {
         Thread t = new Thread(hiloSSL); 
         t.start(); 
 		System.out.println("Start the service of streaming conection"); 
-		socketStreaming = new DatagramSocket();
+
 		HiloEnviaStreamers hiloStreamers= new HiloEnviaStreamers();
         Thread te = new Thread(hiloStreamers); 
         te.start(); 
@@ -235,17 +234,23 @@ public class Server {
 		}
 	}
 
+	
+	public static final String direccionMulticast= "225.4.5.6";
+	
 	public static void mandarInfoStreamers() {
 		try {
-			if(streamers>0) {
+			MulticastSocket socket= new MulticastSocket();
+			socket.setTimeToLive(2);
+			//DatagramSocket socketStreaming = new DatagramSocket();
 			  envioStreamers= getMensajeEnvio();
 		      InetAddress group = InetAddress.getByName(Server.direccionMulticast);
 		      byte[] msg = envioStreamers.getBytes();
-		      DatagramPacket packet = new DatagramPacket(msg, msg.length,
-		         group,Table.STREAMING_PORT);
-		      System.out.println(msg);
-		      socketStreaming.send(packet);
-			}
+
+		      //System.out.println(envioStreamers.length());
+		      DatagramPacket packet = new DatagramPacket(msg, msg.length,group,Table.STREAMING_PORT);
+		      socket.send(packet);
+		      socket.close();
+		      //socketStreaming.send(packet);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -257,16 +262,11 @@ public class Server {
 		for (int i = 0; i < playersInfo.size(); i++) {
 			mensaje+=playersInfo.get(i).getValue()+"--";
 		}
-		mensaje+="||";
+		mensaje+="/";
 		mensaje+="@#"+comida.size();
 		for (int i = 0; i < comida.size(); i++) {
 			mensaje+="#"+comida.get(i).getColor().getRGB()+"#"+round(comida.get(i).getPosX())+"#"+round(comida.get(i).getPosY())+"#"+comida.get(i).getMass();
 		}
 		return mensaje;
 	}
-	public static void aumentarStreamer() {
-		streamers++;
-	}
-	
-	 
 }
