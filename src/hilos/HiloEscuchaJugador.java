@@ -75,7 +75,8 @@ public class HiloEscuchaJugador implements Runnable{
                         st.nextToken();
                         int mass= Integer.parseInt(st.nextToken());
                         
-                        actualizarJugador(name,mass);
+                        actualizarJugadoresWinner(name,mass);
+                        actualizarJugadoresInfo(name, player);
                         if(alive== false) {
                         	this.isloggedin= false;
                         	this.s.close();
@@ -124,16 +125,31 @@ public class HiloEscuchaJugador implements Runnable{
 			e.printStackTrace();
 		}
 	} 
-	public static void actualizarJugador(String name, int mass) {
+	public static void actualizarAStreamer() {
+		
+	}
+	public static void actualizarJugadoresWinner(String name, int mass) {
 		boolean encontro= false;
-		for (int i = 0; i < Server.players.size()&& !encontro; i++) {
-			if(Server.players.get(i).getKey().equals(name)&& Server.players.get(i).getValue()!=mass) {
-				Server.players.set(i, new Pair<String, Integer>(name, mass));
+		for (int i = 0; i < Server.playersForWinner.size()&& !encontro; i++) {
+			if(Server.playersForWinner.get(i).getKey().equals(name)&& Server.playersForWinner.get(i).getValue()!=mass) {
+				Server.playersForWinner.set(i, new Pair<String, Integer>(name, mass));
 				encontro= true;
 			}
 		}
 		if( encontro==false) {
-			Server.players.add(new Pair<String, Integer>(name, mass));
+			Server.playersForWinner.add(new Pair<String, Integer>(name, mass));
+		}
+	}
+	public static void actualizarJugadoresInfo(String name, String info) {
+		boolean encontro= false;
+		for (int i = 0; i < Server.playersInfo.size()&& !encontro; i++) {
+			if(Server.playersInfo.get(i).getKey().equals(name)&& Server.playersInfo.get(i).getValue()!=info) {
+				Server.playersInfo.set(i, new Pair<String, String>(name, info));
+				encontro= true;
+			}
+		}
+		if( encontro==false) {
+			Server.playersInfo.add(new Pair<String, String>(name, info));
 		}
 	}
 	

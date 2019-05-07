@@ -67,33 +67,43 @@ public class PrincipalFrame extends JFrame {
 			@Override
 			public void run() {
 				if (mundo.getConected().equals(Table.WAITING)) {
+					// esperar con cronometro
 					playerWaiting();
 				} else if(mundo.getConected().equals(Table.ENABLE)) {
-					iniciaJuego(nombre);
+					//inicia juego
+					iniciaJuego(nombre,false);
 					iniciarVerificarComer();
 				}
 				else if(mundo.getConected().equals(Table.DISABLE)){
-					iniciaJuego(nombre);
+					//conecta pero espera otro jugador
+					iniciaJuego(nombre,false);
 				}
 			}
 		}, 500);
 	}
+
+	public void cambiarAStreaming(String string) {
+		mundo.conectarAStreaming();
+		Server.aumentarStreamer();
+		iniciaJuego(string, true);
+		iniciarVerificarComer();
+	}
+
 	private HiloVerificarComer nuevo;
+	
 	private void iniciarVerificarComer() {
 		nuevo = new HiloVerificarComer(this);
 		nuevo.start();
 		pack();
 	}
-	private void iniciaJuego(String nombre) {
+	private void iniciaJuego(String nombre, boolean streamer) {
 		panelAux.remove(0);
 		miPanelPlay = new PanelPlayGround(this);
 		miPanelPlay.setFocusable(true);
-		miPanelPlay.iniciar();
-		
+		if(!streamer)miPanelPlay.iniciar();
 		mundo.setNombreJugador(nombre);
 		panelAux.add(miPanelPlay, BorderLayout.CENTER);
 		setPreferredSize(new Dimension(600, 600));
-
 	}
 	public Cronometro cc;
 	private void playerWaiting() {
@@ -161,6 +171,10 @@ public class PrincipalFrame extends JFrame {
 			miPanelPlay.revalidate();
 			miPanelPlay.repaint();
 		}
+		if(mundo.getTipoCliente().equals(Table.TYPE_STREAMER)) {
+			miPanelPlay.revalidate();
+			miPanelPlay.repaint();		
+		}
 	}
 
 	public void mostrarGanadores(String[] Ganadores) {
@@ -184,7 +198,6 @@ public class PrincipalFrame extends JFrame {
 					mundo.dejarEscucharSSL();
 				} else
 					usuarioIncorrecto();
-				    mundo.dejarEscucharSSL();
 			}
 		}, 500);
 	}
@@ -207,10 +220,6 @@ public class PrincipalFrame extends JFrame {
 				"Login", JOptionPane.INFORMATION_MESSAGE);
 	}
 
-	public void cambiarAStreaming() {
-		//falta
-		
-	}
 	
 
 }

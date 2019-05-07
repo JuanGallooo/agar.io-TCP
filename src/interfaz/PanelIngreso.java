@@ -48,7 +48,7 @@ public class PanelIngreso extends JPanel{
 	            }
 	        });
 
-	        jButton2.setText("Intrucciones");
+	        jButton2.setText("Streaming");
 	        jButton2.addActionListener(new java.awt.event.ActionListener() {
 	            public void actionPerformed(java.awt.event.ActionEvent evt) {
 	                jButton2ActionPerformed(evt);
@@ -111,7 +111,8 @@ public class PanelIngreso extends JPanel{
 	    	principal.cambiarAJuego(jTextField1.getText());
 	    }                                        
 
-	    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+	    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {       
+	    	principal.cambiarAStreaming(jTextField1.getText());
 	    }                                        
 
 

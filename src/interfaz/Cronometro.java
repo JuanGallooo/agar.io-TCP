@@ -105,7 +105,7 @@ public class Cronometro extends JPanel implements Runnable, ActionListener
         {
             JButton btn = (JButton)o;
             if( btn.getText().equals("Conectar") ) principal.cambiarAJuego(principal.getMundo().getJugador().getName());
-            if( btn.getText().equals("Streaming") ) principal.cambiarAStreaming();
+            if( btn.getText().equals("Streaming") ) principal.cambiarAStreaming("");
         }
     }
   

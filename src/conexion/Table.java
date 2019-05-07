@@ -6,7 +6,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.Socket;
@@ -22,9 +21,10 @@ import Mundo.Player;
 import hilos.HiloActualizarJugadores;
 import hilos.HiloAudioUDPClient;
 import hilos.HiloEscuchaRespuestaSSL;
+import hilos.HiloEscuchaStreaming;
 
 @SuppressWarnings("serial")
-public class Table implements Serializable{
+public class Table {
 	
 	
 	/**
@@ -35,15 +35,12 @@ public class Table implements Serializable{
 	 * This parameter represents the long of the table of the player but it is constant 400
 	 */
 	public static int LARGO_TABLERO=400;
-<<<<<<< HEAD
-	public static final int PORT_AUDIO = 1024;
-	public static final String DIRECCION_MULTICAST = "localhost";
-=======
+	
+	
 	public static final int PORT_AUDIO = 9999;
 	public static final String DIRECCION_MULTICAST = "224.0.0.1";
 	
 	
->>>>>>> 0cc851e2dea49842faea6cd93eb81d50809a8a45
 	public static String ENABLE="ENABLE";
 	public static String DISABLE="DISABLE";
 	public static String WAITING="WAITING";
@@ -146,12 +143,15 @@ public class Table implements Serializable{
 	}
 	public void conectarAServidor() {
 		try {
+			if(hiloStreaming!= null) {
+				hiloStreaming.dejarEscuchar();
+			}
+			tipoCliente= Table.TYPE_PLAYER;
 			ip= InetAddress.getByName("localhost");
 			s = new Socket(ip, ServerPort);
 			dis = new DataInputStream(s.getInputStream());
 			dos = new DataOutputStream(s.getOutputStream());
 			conected= Table.ENABLE;
-			
 			HiloActualizarJugadores nuevo= new HiloActualizarJugadores(this);
             actualizar = new Thread(nuevo); 
             actualizar.start(); 
@@ -159,6 +159,14 @@ public class Table implements Serializable{
 			e.printStackTrace();
 		}
 	}
+	private HiloEscuchaStreaming hiloStreaming;
+	public void conectarAStreaming() {
+		tipoCliente= Table.TYPE_STREAMER;
+		hiloStreaming = new HiloEscuchaStreaming(this);
+		Thread escuchar= new Thread(hiloStreaming); 
+        escuchar.start(); 
+	}
+	
 	public MulticastSocket getDtSocket() {
 		return dtSocket;
 	}
@@ -588,4 +596,20 @@ public class Table implements Serializable{
 	public void setTipoCliente(String tipoCliente) {
 		this.tipoCliente = tipoCliente;
 	}
+	public void actualizarDatosStreaming(String msg) {
+		try {
+			System.out.println("Entre a actualizar");
+			String[] arreglo= msg.split("||");
+			String[] jugadores= arreglo[0].split("--");
+			int jugardoresActu= Integer.parseInt(jugadores[0]);
+			for (int i = 1; i < jugardoresActu; i++) {
+				actualizarJugador(jugadores[i]);
+			}
+			actualizarComida(arreglo[1]);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+
 }

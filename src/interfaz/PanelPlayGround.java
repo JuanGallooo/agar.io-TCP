@@ -19,6 +19,7 @@ import javax.swing.JPanel;
 import Mundo.Ball;
 import Mundo.Food;
 import Mundo.Player;
+import conexion.Table;
 import hilos.HiloMovimientoMouse;
 
 @SuppressWarnings("serial")
@@ -63,12 +64,16 @@ public class PanelPlayGround extends JPanel implements   MouseMotionListener{
 			g.fillOval((int)p.getPosX(), (int)p.getPosY(), p.getRadious()*2, p.getRadious()*2);
 			}
 			}
-		}	
+		}
 		Player nuevo= principal.getPrincipal();
+		if(principal.getMundo().getTipoCliente().equals(Table.TYPE_PLAYER)) {
+			
 		g.setColor(nuevo.getColor());
 		g.fillOval((int)nuevo.getPosX(), (int)nuevo.getPosY(), (nuevo.getRadious())*2, (nuevo.getRadious())*2);
 		g.setColor(Color.black);
 		g.drawString(nuevo.getName(), nuevo.getCenterH()-10, nuevo.getCenterK()+5);
+		}
+		
 		ArrayList<Player> juga= principal.getJugadores();
 		
 		for (int i = 0; i < juga.size(); i++) {

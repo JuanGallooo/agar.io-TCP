@@ -11,7 +11,6 @@ import java.io.PrintWriter;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.MulticastSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -23,11 +22,11 @@ import java.util.TimerTask;
 import Mundo.Food;
 import Mundo.Player;
 import hilos.HiloAudioUDPServer;
+import hilos.HiloEnviaStreamers;
 import hilos.HiloEscuchaJugador;
 import hilos.HiloServidorSSL;
 import hilos.audioHelp;
 import javafx.util.Pair;
-
 
 public class Server {
 	
@@ -37,6 +36,7 @@ public class Server {
      * Property that represents the numbers of client that are conected.
      */
     static int i = 0;
+    static int streamers;
     /**
      * The server has the arrayList of Food that represents the food that are in the table of every playe.
      */
@@ -45,9 +45,14 @@ public class Server {
 
     public static ArrayList<Food> comida;
     
-    public static ArrayList<Pair<String, Integer>> players;
+    public static ArrayList<Pair<String, Integer>> playersForWinner;
+    public static ArrayList<Pair<String, String>> playersInfo;
     
-   
+	private static DatagramSocket socketStreaming;
+	
+	public static final String direccionMulticast= "230.0.0.0";
+	
+	public static String envioStreamers;	
     
     private static HiloAudioUDPServer hiloAudioServer;
     
@@ -68,7 +73,7 @@ public class Server {
 	public static void main(String[] args) throws IOException  
     {
     	crearHiloMusica();
-		 
+		streamers= 0;
         ServerSocket ss = new ServerSocket(8000); 
         Socket s; 
 		comida= new ArrayList<>();
@@ -76,11 +81,18 @@ public class Server {
 			Food nueva= new Food();
 			comida.add(nueva);
 		}
-		players= new ArrayList<Pair<String, Integer>>();
+		playersForWinner= new ArrayList<Pair<String, Integer>>();
+		playersInfo= new ArrayList<Pair<String, String>>();
 		System.out.println("Start the server of the SSL conection"); 
 		HiloServidorSSL hiloSSL= new HiloServidorSSL();
         Thread t = new Thread(hiloSSL); 
         t.start(); 
+		System.out.println("Start the service of streaming conection"); 
+		socketStreaming = new DatagramSocket();
+		HiloEnviaStreamers hiloStreamers= new HiloEnviaStreamers();
+        Thread te = new Thread(hiloStreamers); 
+        te.start(); 
+        
         System.out.println("Start to wait for the clients"); 
         while (true)  
         { 
@@ -100,7 +112,7 @@ public class Server {
             				reportarGanadores();
             				System.out.println(true);
             			}
-            		}, 10000);
+            		}, 100000);
             	}
         		System.out.println("Creating a new handler for this player..."); 
         		HiloEscuchaJugador mtch = new HiloEscuchaJugador(s,"Player " + i, dis, dos); 
@@ -141,10 +153,10 @@ public class Server {
 	private static String getGanador() {
 		String retorno="";
 		int mayor=Integer.MIN_VALUE;
-		for (int i = 0; i <players.size(); i++) {
-			if(players.get(i).getValue()>mayor) {
-				retorno= players.get(i).getKey()+" "+players.get(i).getValue(); 
-				mayor= players.get(i).getValue();
+		for (int i = 0; i <playersForWinner.size(); i++) {
+			if(playersForWinner.get(i).getValue()>mayor) {
+				retorno= playersForWinner.get(i).getKey()+" "+playersForWinner.get(i).getValue(); 
+				mayor= playersForWinner.get(i).getValue();
 			}
 		}
 		return retorno;
@@ -174,7 +186,7 @@ public class Server {
 	
 	public static Player[] Ganadores() {
 		Player[] jugadores= new Player[i];
-		Arrays.sort(players.toArray(jugadores), java.util.Collections.reverseOrder());
+		Arrays.sort(playersForWinner.toArray(jugadores), java.util.Collections.reverseOrder());
 		return jugadores;
 	}
 
@@ -213,28 +225,48 @@ public class Server {
 		}
 		return retorno;
 	}
-	
 
 	public static void actualizarJugador(String name, int mass) {
-		for (int i = 0; i < players.size(); i++) {
-			if(players.get(i).getKey().equals(name)&& players.get(i).getValue()!=mass) {
-				players.set(i, new Pair<String, Integer>(name, mass));
+		for (int i = 0; i < playersForWinner.size(); i++) {
+			if(playersForWinner.get(i).getKey().equals(name)&& playersForWinner.get(i).getValue()!=mass) {
+				playersForWinner.set(i, new Pair<String, Integer>(name, mass));
 				break;
 			}
 		}
 	}
-	private static DatagramSocket socket;
-	
-	public static final String direccionMulticast= "230.0.0.0";
-	
-	public void mandarInfoStreamers() {
-	      InetAddress group = InetAddress.getByName(Server.direccionMulticast);
-	      byte[] msg = message.getBytes();
-	      DatagramPacket packet = new DatagramPacket(msg, msg.length,
-	         group,Table.STREAMING_PORT);
-	      socket.send(packet);
-	      //socket.close();
-		
+
+	public static void mandarInfoStreamers() {
+		try {
+			if(streamers>0) {
+			  envioStreamers= getMensajeEnvio();
+		      InetAddress group = InetAddress.getByName(Server.direccionMulticast);
+		      byte[] msg = envioStreamers.getBytes();
+		      DatagramPacket packet = new DatagramPacket(msg, msg.length,
+		         group,Table.STREAMING_PORT);
+		      System.out.println(msg);
+		      socketStreaming.send(packet);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
+
+	private static String getMensajeEnvio() {
+		String mensaje= "";
+		mensaje+=playersInfo.size()+"--";
+		for (int i = 0; i < playersInfo.size(); i++) {
+			mensaje+=playersInfo.get(i).getValue()+"--";
+		}
+		mensaje+="||";
+		mensaje+="@#"+comida.size();
+		for (int i = 0; i < comida.size(); i++) {
+			mensaje+="#"+comida.get(i).getColor().getRGB()+"#"+round(comida.get(i).getPosX())+"#"+round(comida.get(i).getPosY())+"#"+comida.get(i).getMass();
+		}
+		return mensaje;
+	}
+	public static void aumentarStreamer() {
+		streamers++;
+	}
+	
 	 
 }
