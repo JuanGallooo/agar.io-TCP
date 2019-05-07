@@ -27,7 +27,7 @@ public class HiloEscuchaStreaming implements Runnable{
 				
 				while (escuchar) {
 					
-					byte buf[]= new byte[1024];
+					byte buf[]= new byte[3000];
 					DatagramPacket packet = new DatagramPacket(buf, buf.length);
 					
 					socket.receive(packet);

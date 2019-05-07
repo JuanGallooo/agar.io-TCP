@@ -48,8 +48,9 @@ public class HiloAudioUDPServer extends Thread {
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	        }
-
-	        audioFormat = new AudioFormat(44100, 16, 2, true, false);
+	        
+	        audioFormat = audioInputStream.getFormat();
+	        //audioFormat = new AudioFormat(44100, 16, 2, true, false);
 	        DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
 	        System.out.println(info);
 
