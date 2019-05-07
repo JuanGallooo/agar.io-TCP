@@ -2,6 +2,11 @@ package interfaz;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -12,6 +17,7 @@ import javax.swing.JPanel;
 
 import Mundo.Food;
 import Mundo.Player;
+import chat.Principal;
 import conexion.Table;
 import hilos.HiloVerificarComer;
 import conexion.*;
@@ -26,6 +32,7 @@ public class PrincipalFrame extends JFrame {
 	private JPanel panelAux;
 	private PanelIngreso miPanelIngreso;
 	private PanelLogin miPanelLogin;
+	private Principal miPanelChat;
 
 	public PrincipalFrame() {
 
@@ -45,6 +52,44 @@ public class PrincipalFrame extends JFrame {
 		add(panelAux, BorderLayout.CENTER);
 
 		pack();
+	}
+	
+	final static int ServerPort = 2000; 
+	  
+	public InetAddress ip; 
+      
+    public Socket s; 
+      
+    public DataInputStream dis; 
+    public DataOutputStream dos; 
+
+	public void iniciarChat() {
+		try {
+            ip= InetAddress.getByName("localhost");
+            s = new Socket(ip, ServerPort);
+            
+            dis = new DataInputStream(s.getInputStream());
+            dos = new DataOutputStream(s.getOutputStream());
+              
+            Thread readMessage = new Thread(new Runnable()  
+            { 
+                public void run() { 
+      
+                    while (true) { 
+                        try { 
+                            String msg = dis.readUTF(); 
+                            miPanelChat.agregarMensaje(msg);
+                        } catch (IOException e) { 
+      
+                            e.printStackTrace(); 
+                        } 
+                    } 
+                } 
+            }); 
+            readMessage.start(); 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void cambiarAIngreso() {
@@ -83,8 +128,13 @@ public class PrincipalFrame extends JFrame {
 	}
 
 	public void cambiarAStreaming(String string) {
+		iniciarChat();
+		miPanelChat= new Principal();
+		miPanelChat.asignarMundo(this);
+
+		
 		mundo.conectarAStreaming();
-		iniciaJuego(string, true);
+		iniciaStreaming(string, true);
 		iniciarVerificarComer();
 	}
 
@@ -94,6 +144,22 @@ public class PrincipalFrame extends JFrame {
 		nuevo = new HiloVerificarComer(this);
 		nuevo.start();
 		pack();
+	}
+	private void iniciaStreaming(String nombre, boolean streamer) {
+		panelAux.remove(0);
+		miPanelPlay = new PanelPlayGround(this);
+		miPanelPlay.setFocusable(true);
+		if(!streamer)miPanelPlay.iniciar();
+		mundo.setNombreJugador(nombre);
+		panelAux.add(miPanelPlay, BorderLayout.CENTER);
+		JFrame nada= new JFrame();
+		nada.setLayout(new BorderLayout());
+		nada.add(miPanelChat,BorderLayout.CENTER);
+		nada.setVisible(true);
+		nada.setLocationRelativeTo(null);
+		nada.pack();
+		
+		setPreferredSize(new Dimension(600, 600));
 	}
 	private void iniciaJuego(String nombre, boolean streamer) {
 		panelAux.remove(0);
@@ -217,4 +283,14 @@ public class PrincipalFrame extends JFrame {
 		JOptionPane.showMessageDialog(this, "Contrase�a o usuario incorrecto, favor registrarse o correguir los campos",
 				"Login", JOptionPane.INFORMATION_MESSAGE);
 	}
+
+	public void sendMessage(String string) {
+        try { 
+            dos.writeUTF(string); 
+        } catch (IOException e) { 
+            e.printStackTrace(); 
+        } 
+	}
+
+
 }

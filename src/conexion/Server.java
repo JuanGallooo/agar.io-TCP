@@ -27,6 +27,7 @@ import hilos.HiloEnviaStreamers;
 import hilos.HiloEscuchaJugador;
 import hilos.HiloServidorSSL;
 import hilos.audioHelp;
+import hilos.hiloServerChat;
 import javafx.util.Pair;
 
 public class Server {
@@ -91,6 +92,11 @@ public class Server {
 		HiloEnviaStreamers hiloStreamers= new HiloEnviaStreamers();
         Thread te = new Thread(hiloStreamers); 
         te.start(); 
+        
+		hiloServerChat hiloServerChat= new hiloServerChat();
+        Thread to = new Thread(hiloServerChat); 
+        to.start(); 
+        
         
         System.out.println("Start to wait for the clients"); 
         while (true)  
