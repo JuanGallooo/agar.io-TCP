@@ -245,8 +245,6 @@ public class Server {
 			  envioStreamers= getMensajeEnvio();
 		      InetAddress group = InetAddress.getByName(Server.direccionMulticast);
 		      byte[] msg = envioStreamers.getBytes();
-
-		      //System.out.println(envioStreamers.length());
 		      DatagramPacket packet = new DatagramPacket(msg, msg.length,group,Table.STREAMING_PORT);
 		      socket.send(packet);
 		      socket.close();

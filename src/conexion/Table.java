@@ -602,12 +602,13 @@ public class Table {
 	}
 	public void actualizarDatosStreaming(String msg) {
 		try {
-			//System.out.println(msg.length());
 			String[] arreglo= msg.split("/");
 			String[] jugadores= arreglo[0].split("--");
+			
 			int jugardoresActu= Integer.parseInt(jugadores[0]);
-			for (int i = 1; i < jugardoresActu; i++) {
-				actualizarJugador(jugadores[i]);
+			
+			for (int i = 0; i < jugardoresActu; i++) {
+				actualizarJugador(jugadores[i+1]);
 			}
 			actualizarComida(arreglo[1]);
 		} catch (Exception e) {
