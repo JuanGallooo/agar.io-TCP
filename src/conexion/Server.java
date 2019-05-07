@@ -71,7 +71,6 @@ public class Server {
     @SuppressWarnings("resource")
 	public static void main(String[] args) throws IOException  
     {
-    	crearHiloMusica();
 		streamers= 0;
         ServerSocket ss = new ServerSocket(8000); 
         Socket s; 
@@ -102,6 +101,7 @@ public class Server {
             if(i<5) {   
             	if( i==0) {
             		dos.writeUTF("--wait");
+            		crearHiloMusica();
             	}
             	if(i==1) {
             		ar.get(0).dos.writeUTF("--newPlayer");

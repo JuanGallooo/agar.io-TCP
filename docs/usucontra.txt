@@ -1,7 +1,2 @@
 a a
 a a
-ss ddd
-x x
-qq qq
-q q
-s a
