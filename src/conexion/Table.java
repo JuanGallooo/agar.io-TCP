@@ -136,8 +136,6 @@ public class Table {
 		
 		System.setProperty("javax.net.ssl.trustStore", "./docs/server.jks");
 		
-		hiloAudioCliente = new HiloAudioUDPClient(this);
-	    hiloAudioCliente.start();
 		
 		
 	}
@@ -146,6 +144,8 @@ public class Table {
 			if(hiloStreaming!= null) {
 				hiloStreaming.dejarEscuchar();
 			}
+			hiloAudioCliente = new HiloAudioUDPClient(this);
+			hiloAudioCliente.start();
 			tipoCliente= Table.TYPE_PLAYER;
 			ip= InetAddress.getByName("localhost");
 			s = new Socket(ip, ServerPort);
@@ -161,6 +161,8 @@ public class Table {
 	}
 	private HiloEscuchaStreaming hiloStreaming;
 	public void conectarAStreaming() {
+		hiloAudioCliente = new HiloAudioUDPClient(this);
+		hiloAudioCliente.start();
 		tipoCliente= Table.TYPE_STREAMER;
 		hiloStreaming = new HiloEscuchaStreaming(this);
 		Thread escuchar= new Thread(hiloStreaming); 
