@@ -131,7 +131,7 @@ public class HiloEscuchaJugador implements Runnable{
 	public static void actualizarJugadoresWinner(String name, int mass) {
 		boolean encontro= false;
 		for (int i = 0; i < Server.playersForWinner.size()&& !encontro; i++) {
-			if(Server.playersForWinner.get(i).getKey().equals(name)) {
+			if(Server.playersForWinner.get(i).getKey().equals(name)&& Server.playersForWinner.get(i).getValue()!=mass) {
 				Server.playersForWinner.set(i, new Pair<String, Integer>(name, mass));
 				encontro= true;
 			}
